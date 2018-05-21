@@ -1,4 +1,14 @@
 ---
 - hosts: all
+  become: true
+  gather_facts: False
+  pre_tasks:
+    - name: Check for correct SSH port
+      include_tasks: tasks/determine-ssh-port.yml
+      when:
+        - ansible_port is defined
+        - ansible_port != 22
+    - name: Gather facts
+      setup: ~
   tasks:
     - ping:
