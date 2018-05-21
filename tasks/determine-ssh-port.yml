@@ -4,9 +4,31 @@
 #   - ansible_port is specified
 
 - name: Remember configured port
-  set_fact: configured_port={{ansible_port}}
+  set_fact: configured_port={{ansible_port}} configured_port_is_valid=no
+
+- name: Check for opened configured SSH port
+  when:
+    - ansible_port is defined
+  wait_for:
+    port: "{{ansible_port}}"
+    state: started
+    host: "{{inventory_hostname}}"
+    connect_timeout: 5
+    timeout: 7
+  delegate_to: localhost
+  ignore_errors: yes
+  register: ssh_port_configured
+
+- name: Set used port to configured
+  when:
+    - ssh_port_configured is defined
+    - ssh_port_configured.state is defined
+    - ssh_port_configured.state == "started"
+  set_fact: configured_port_is_valid=yes
 
 - name: Check for opened default SSH port
+  when:
+    - not configured_port_is_valid
   wait_for:
     port: 22
     state: started
@@ -22,36 +44,12 @@
     - ssh_port_default is defined
     - ssh_port_default.state is defined
     - ssh_port_default.state == "started"
-  set_fact: ansible_port=22
-  register: ssh_port
-
-- name: Check for opened configured SSH port
-  when:
-    - ansible_port is defined
-    - ssh_port_default is defined
-    - ssh_port_default.state is undefined
-  wait_for:
-    port: "{{ansible_port}}"
-    state: started
-    host: "{{inventory_hostname}}"
-    connect_timeout: 5
-    timeout: 10
-  delegate_to: localhost
-  ignore_errors: yes
-  register: ssh_port_configured
-
-- name: Set used port to configured
-  when:
-    - ssh_port_configured is defined
-    - ssh_port_configured.state is defined
-    - ssh_port_configured.state == "started"
-  debug: msg="Found configured SSH port"
-  register: ssh_port
+  set_fact: ansible_port=22 configured_port_is_valid=yes
 
 - name: Fail if no open port was found
   when:
-    - ssh_port is undefined
-  fail: msg="The SSH port is not 22 or {{ansible_port}}"
+    - not configured_port_is_valid
+  fail: msg="The SSH port is not {{ansible_port}} or 22"
 
 - name: Check that the correct port is used
   ping:
