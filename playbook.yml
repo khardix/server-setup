@@ -10,5 +10,6 @@
         - ansible_port != 22
     - name: Gather facts
       setup: ~
-  tasks:
-    - ping:
+
+  roles:
+    - khardix.sslh

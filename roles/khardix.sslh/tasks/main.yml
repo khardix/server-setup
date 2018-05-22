@@ -1,0 +1,44 @@
+---
+- name: Enable EPEL repository
+  package: update_cache=yes name=epel-release state=installed
+
+- name: Install sslh package
+  package: name=sslh state=installed
+
+- name: Install socket and service files
+  template: src={{item}} dest=/etc/systemd/system/{{item}} trim_blocks=yes
+  with_items:
+    - sslh.service
+    - sslh.socket
+  notify:
+    - Reload daemon definitions
+    - Reload sslh
+
+- name: Configure sshd
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    insertafter: '^#ListenAddress '
+    block: |
+      ListenAddress localhost
+      {% for addr in ansible_all_ipv4_addresses if addr.startswith('192.168.') %}
+      ListenAddress {{addr}}
+      {% endfor %}
+      {% for addr in ansible_all_ipv6_addresses if addr.lower().startswith('fe80:') %}
+      ListenAddress [{{addr}}]
+      {% endfor %}
+    backup: yes
+    validate: /usr/sbin/sshd -t -f %s
+  notify:
+    - Reload sshd
+
+- name: Apply changes to SSH
+  meta: flush_handlers
+
+- name: Redirect to new ssh port
+  set_fact: ansible_port=443
+  when:
+    - not ansible_host.lower().startswith('192.168.')
+    - not ansible_host.lower().startswith('fe80:')
+
+- name: Verify existing connection
+  ping:
