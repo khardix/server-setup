@@ -1,7 +1,4 @@
 ---
-- name: Enable EPEL repository
-  package: update_cache=yes name=epel-release state=installed
-
 - name: Install sslh package
   package: name=sslh state=installed
 

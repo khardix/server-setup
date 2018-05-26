@@ -1,3 +1,6 @@
+dependencies:
+  - khardix.epel
+
 galaxy_info:
   author: Jan "Khardix" Staněk
   description: sslh multiplexer for safer SSH
@@ -21,5 +24,3 @@ galaxy_info:
     - ssh
     - ssl
     - hardening
-
-  dependencies: []
