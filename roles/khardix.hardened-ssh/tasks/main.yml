@@ -25,11 +25,15 @@
   notify:
     - Reload sshd
 
+- name: Add root key
+  when: ssh_root_key is defined
+  authorized_key: user=root key={{ssh_root_key}}
+
 - name: Tighten root login
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^#?PermitRootLogin'
-    line: PermitRootLogin {% if ssh_root_key|default(false) %}without-password{% else %}no{% endif %}
+    line: PermitRootLogin {% if ssh_root_key is defined %}without-password{% else %}no{% endif %}
     validate: /usr/sbin/sshd -t -f %s
   notify:
     - Reload sshd
