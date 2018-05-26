@@ -2,9 +2,6 @@
 - name: Reload sslh
   systemd: name=sslh.socket enabled=yes state=restarted daemon_reload=yes
 
-- name: Reload sshd
-  systemd: name=sshd.service enabled=yes state=reloaded daemon_reload=yes
-
 - name: Assemble protocol configuration
   assemble:
     src: /etc/sslh.d/proto.d

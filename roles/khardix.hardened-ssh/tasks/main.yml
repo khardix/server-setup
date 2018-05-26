@@ -1,0 +1,35 @@
+---
+- name: Switch to SSLH
+  set_fact: ansible_port=443
+  when:
+    - not ansible_host.lower().startswith('192.168.')
+    - not ansible_host.lower().startswith('fe80:')
+
+- name: Verify existing connection
+  ping:
+
+- name: Listen only on internal addresses
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    insertafter: '^#ListenAddress '
+    block: |
+      ListenAddress localhost
+      {% for addr in ansible_all_ipv4_addresses if addr.startswith('192.168.') %}
+      ListenAddress {{addr}}
+      {% endfor %}
+      {% for addr in ansible_all_ipv6_addresses if addr.lower().startswith('fe80:') %}
+      ListenAddress [{{addr}}]
+      {% endfor %}
+    backup: yes
+    validate: /usr/sbin/sshd -t -f %s
+  notify:
+    - Reload sshd
+
+- name: Tighten root login
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin'
+    line: PermitRootLogin {% if ssh_root_key|default(false) %}without-password{% else %}no{% endif %}
+    validate: /usr/sbin/sshd -t -f %s
+  notify:
+    - Reload sshd

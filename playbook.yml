@@ -12,6 +12,4 @@
       setup: ~
 
   roles:
-    - name: khardix.sslh
-      sslh_service: ssh
-      sslh_port: 22
+    - khardix.hardened-ssh
