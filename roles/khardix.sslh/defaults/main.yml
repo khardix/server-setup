@@ -1,5 +1,0 @@
----
-# Default multiplexed services
-services:
-  ssh: 22
-  ssl: 443
