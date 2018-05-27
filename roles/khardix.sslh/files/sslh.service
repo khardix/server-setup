@@ -1,5 +1,6 @@
 [Unit]
 PartOf=sslh.socket
+Requires=sslh.socket
 
 [Service]
 ExecStart=/usr/sbin/sslh --config=/etc/sslh.cfg --verbose --foreground

@@ -1,6 +1,9 @@
 ---
 - name: Reload sslh
-  systemd: name=sslh.socket enabled=yes state=restarted daemon_reload=yes
+  systemd: "{{item}}"
+  with_items:
+    - name=sslh.service enabled=no state=stopped daemon_reload=yes
+    - name=sslh.socket enabled=yes state=restarted
 
 - name: Assemble protocol configuration
   assemble:
