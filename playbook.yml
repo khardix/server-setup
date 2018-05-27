@@ -12,4 +12,4 @@
       setup: ~
 
   roles:
-    - khardix.hardened-ssh
+    - khardix.multi-user

@@ -1,0 +1,22 @@
+---
+- name: Install required shells
+  package: name={{active_users|map(attribute='shell')|list}} state=present
+
+- name: Add users to system
+  user:
+    name: "{{item.name}}"
+    password: "{{item.password_hash|default(omit)}}"
+    groups: "{% if item.admin|default(false) %}wheel{% endif %}"
+    append: yes
+    shell: /usr/bin/{{item.shell|default(omit)}}
+  with_items: "{{active_users}}"
+
+- name: Add SSH keys for active users
+  authorized_key: user={{item.name}} key="{{item.ssh_key}}"
+  with_items: "{{active_users}}"
+
+- name: Enable SSH login for active users
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?AllowUsers'
+    line: AllowUsers {{active_users|map(attribute='name')|list|union([ansible_user])|join(' ')}}

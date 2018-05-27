@@ -1,0 +1,9 @@
+dependencies:
+  - khardix.hardened-ssh
+
+galaxy_info:
+  author: Jan "Khardix" Staněk
+  description: Adds human users to the target system
+  license: MIT
+
+  min_ansible_version: 2.4
