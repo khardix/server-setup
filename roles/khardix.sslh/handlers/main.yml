@@ -1,12 +1,14 @@
 ---
-- name: Reload sslh
-  systemd: "{{item}}"
-  with_items:
-    - name=sslh.service enabled=no state=stopped daemon_reload=yes
-    - name=sslh.socket enabled=yes state=restarted
-
 - name: Assemble protocol configuration
   assemble:
     src: /etc/sslh.d/proto.d
     dest: /etc/sslh.d/protocols.cfg
-  notify: Reload sslh
+  notify: Reload SSLH
+
+- name: Reload sslh.service
+  systemd: name=sslh.service state=stopped enabled=false daemon_reload=yes
+  listen: 'Reload SSLH'
+
+- name: Reload sslh.socket
+  systemd: name=sslh.socket state=restarted enabled=true
+  listen: 'Reload SSLH'

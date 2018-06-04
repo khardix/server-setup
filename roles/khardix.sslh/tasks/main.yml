@@ -6,11 +6,11 @@
     - name: Install service file
       copy: src=sslh.service dest=/etc/systemd/system/sslh.service
       notify:
-        - Reload sslh
+        - Reload SSLH
     - name: Install socket file
       template: src=sslh.socket dest=/etc/systemd/system/sslh.socket
       notify:
-        - Reload sslh
+        - Reload SSLH
 
 - block:
     - name: Create snippets directory
@@ -22,4 +22,7 @@
     - name: Install configuration file
       copy: src=sslh.cfg dest=/etc/sslh.cfg
       notify:
-        - Reload sslh
+        - Reload SSLH
+
+- name: Apply changes
+  meta: flush_handlers
