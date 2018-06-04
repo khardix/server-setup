@@ -3,6 +3,9 @@
 #   - connection type is SSH
 #   - ansible_port is specified
 
+- name: Determine target name
+  set_fact: target_hostname="{{ansible_host if ansible_host != 'localhost' else inventory_hostname}}"
+
 - name: Remember configured port
   set_fact: configured_port={{ansible_port}} configured_port_is_valid=no
 
@@ -12,7 +15,7 @@
   wait_for:
     port: "{{ansible_port}}"
     state: started
-    host: "{{inventory_hostname}}"
+    host: "{{target_hostname}}"
     connect_timeout: 5
     timeout: 7
   delegate_to: localhost
@@ -32,7 +35,7 @@
   wait_for:
     port: 22
     state: started
-    host: "{{inventory_hostname}}"
+    host: "{{target_hostname}}"
     connect_timeout: 5
     timeout: 10
   delegate_to: localhost
