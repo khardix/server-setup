@@ -6,9 +6,9 @@
   notify: Reload SSLH
 
 - name: Reload sslh.service
-  systemd: name=sslh.service state=stopped enabled=false daemon_reload=yes
+  systemd: name=sslh.service state=stopped daemon_reload=yes
   listen: 'Reload SSLH'
 
 - name: Reload sslh.socket
-  systemd: name=sslh.socket state=restarted enabled=true
+  systemd: name=sslh.socket state=restarted enabled=yes
   listen: 'Reload SSLH'
