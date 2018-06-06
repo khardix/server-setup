@@ -1,5 +1,5 @@
 ---
-- hosts: webserver
+- hosts: daidalos.khardix.cz
   become: true
   gather_facts: False
   pre_tasks:
