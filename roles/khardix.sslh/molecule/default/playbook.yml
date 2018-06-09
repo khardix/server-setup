@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: khardix.sslh
+      sslh_port: 22
+      sslh_service: ssh
