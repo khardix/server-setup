@@ -30,7 +30,8 @@ http {
         return 444;
     }
     server {
-        listen localhost:443 default_server;  # compatibility with sslh
+        listen 127.0.0.1:443 default_server;  # compatibility with sslh
+        listen [::1]:443 default_server;
         return 444;
     }
 }
