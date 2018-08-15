@@ -73,5 +73,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "playbook.yml"
+      ansible.skip_tags = ENV.fetch('ANSIBLE_SKIP_TAGS', nil)
+      ansible.tags = ENV.fetch('ANSIBLE_TAGS', nil)
   end
 end

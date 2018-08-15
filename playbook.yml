@@ -12,4 +12,5 @@
       setup: ~
 
   roles:
-    - khardix.multi-user  # includes hardened-ssh
+    - role: khardix.multi-user  # includes hardened-ssh
+      tags: [bootstrap]
