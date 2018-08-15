@@ -1,0 +1,36 @@
+---
+stages: [test]
+variables:
+  PIP_CACHE_DIR: '$CI_PROJECT_DIR/.pip'
+cache:
+  paths:
+    - .pip/
+    - venv/
+
+before_script: &global_setup
+  - 'docker -v && python3 -V'
+  - 'python3 -m venv venv'
+  - 'source venv/bin/activate'
+  - 'pip install ansible docker molecule'
+
+.molecule_base: &base
+  stage: test
+  tags: [pip36, docker]
+
+role:epel:
+  <<: *base
+  script:
+    - cd roles/khardix.epel
+    - molecule test
+
+role:sslh:
+  <<: *base
+  script:
+    - cd roles/khardix.sslh
+    - molecule test
+
+role:nginx:
+  <<: *base
+  script:
+    - cd roles/khardix.nginx
+    - molecule test
