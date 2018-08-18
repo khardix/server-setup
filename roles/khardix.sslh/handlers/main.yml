@@ -1,5 +1,5 @@
 ---
-- name: Assemble protocol configuration
+- name: Assemble SSLH protocol configuration
   assemble:
     src: /etc/sslh.d/proto.d
     dest: /etc/sslh.d/protocols.cfg

@@ -1,10 +1,8 @@
 # khardix.sslh – SSLH Protocol multiplexer
 
-This role installs the [SSLH](http://www.rutschle.net/tech/sslh/README.html) protocol multiplexer, and hides SSH behind the 443 port.
-
-## Dependencies
-
--   `khardix.epel` -- Enable repository with the `sslh` package.
+This role installs the [SSLH](http://www.rutschle.net/tech/sslh/README.html) protocol multiplexer.
+By default, this will listen on all non-localhost interface ports 443 and forward any traffic to localhost:443.
+In order to add another kind of forwarding, use `khardix.sslh-service` role with appropriate parameters.
 
 ## Requirements
 
@@ -12,11 +10,9 @@ This role installs the [SSLH](http://www.rutschle.net/tech/sslh/README.html) pro
 
 Also, the playbook should handle the change of SSH port during execution.
 
-## Role variables
+## Dependencies
 
--   `sslh_service` -- Name of the service to demultiplex, i.e. `ssh`, `ssl`.
-    See `sslh(8)` for valid values.
--   `sslh_port` -- `localhost` port the service daemon is listening at.
+-   `khardix.epel` -- Enable repository with the `sslh` package.
 
 ## Example Playbook
 
@@ -25,12 +21,7 @@ Also, the playbook should handle the change of SSH port during execution.
   pre_tasks:
     - include: detect_used_ssh_port
   roles:
-    - name: khardix.sslh
-      sslh_service: ssl
-      sslh_port: 443
-    - name: khardix.sslh
-      sslh_service: ssh
-      sslh_port: 22
+    - role: khardix.sslh
 ```
 
 ## License

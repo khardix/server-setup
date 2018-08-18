@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: khardix.sslh-service
+      sslh_port: 443
+      sslh_service: ssl

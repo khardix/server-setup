@@ -1,0 +1,5 @@
+---
+- name: Create configuration snippet
+  template: src=service.cfg dest=/etc/sslh.d/proto.d/{{sslh_port}}-{{sslh_service}}.cfg
+  notify:
+    - Assemble SSLH protocol configuration
