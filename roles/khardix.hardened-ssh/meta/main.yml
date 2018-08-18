@@ -1,5 +1,6 @@
+---
 dependencies:
-  - name: khardix.sslh
+  - name: khardix.sslh-service
     sslh_service: ssh
     sslh_port: 22
 
@@ -10,8 +11,6 @@ galaxy_info:
 
   min_ansible_version: 2.4
 
-  # platforms is a list of platforms, and each platform has a name and a list of versions.
-  #
   platforms:
     - name: CentOS
       versions: [6, 7]
