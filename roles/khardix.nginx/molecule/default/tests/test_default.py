@@ -24,3 +24,11 @@ def test_default_server_closes_connection(host, port):
 
     assert response.rc != 0
     assert "Empty reply from server" in response.stderr
+
+
+@pytest.mark.parametrize("target", ["80", "127.0.0.1:443", "::1:443"])
+def test_nginx_listens(host, target):
+    """Nginx listens on expected address/port combination"""
+
+    socket = host.socket("tcp://{target}".format(target=target))
+    assert socket.is_listening

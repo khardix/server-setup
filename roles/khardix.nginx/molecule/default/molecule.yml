@@ -7,11 +7,10 @@ lint:
   name: yamllint
 platforms:
   - name: instance
-    image: "centos:7"
-    command: /usr/sbin/init
+    image: "centos/systemd:latest"
     privileged: true
-    volumes: ["/sys/fs/cgroup:/sys/fs/cgroup:ro"]
-    tmpfs: ["/tmp", "/run"]
+    volume_mounts: ["/sys/fs/cgroup:/sys/fs/cgroup:ro"]
+    command: /usr/sbin/init
 provisioner:
   name: ansible
   lint:

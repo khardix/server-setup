@@ -14,4 +14,7 @@ galaxy_info:
         - 7
 
 dependencies:
-  - khardix.epel
+  - role: khardix.epel
+  - role: khardix.sslh-service
+    sslh_service: ssl
+    sslh_port: 443
