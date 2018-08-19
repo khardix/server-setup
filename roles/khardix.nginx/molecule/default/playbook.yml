@@ -2,7 +2,4 @@
 - name: Converge
   hosts: all
   roles:
-    - role: "khardix.sslh"  # To detect possible listening conflicts
-      sslh_service: ssl
-      sslh_port: 443
     - role: "khardix.nginx"
