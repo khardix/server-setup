@@ -16,6 +16,9 @@ using the Let's Encrypt CA and dehydrated client.
     which manages the automatic certificate renewal requests
     (uses default from `khardix.ssl-server-common`).
 
+-   `letsencrypt_contact_email`: Contact email for communication with the CA,
+    will receive expiration notices (no default, **recommended**).
+
 -   `letsencrypt_api_url`: The URL to direct all certificate requests to;
     useful for testing (default: Live Let's Encrypt API endpoint).
 
@@ -32,6 +35,7 @@ using the Let's Encrypt CA and dehydrated client.
     - role: khardix.dehydrated
       ssl_access_group: dehydrated
       letsencrypt_api_url: 'https://acme-staging-v02.api.letsencrypt.org/directory'
+      letsencrypt_contact_email: 'khardix@gmail.com'
 ```
 
 ## License

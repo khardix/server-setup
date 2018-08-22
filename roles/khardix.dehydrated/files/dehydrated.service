@@ -1,0 +1,9 @@
+[Unit]
+Description=Automatic renewal of server SSL certificates
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/dehydrated --cron
+ExecStart=/usr/bin/chmod --recursive u=rwX,g=rX,o= /etc/dehydrated/certs

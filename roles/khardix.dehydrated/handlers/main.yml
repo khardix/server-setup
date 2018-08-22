@@ -1,0 +1,21 @@
+---
+- name: Register dehydrated account
+  command: /usr/bin/dehydrated --accept-terms --register
+
+- name: Reload dehydrated service definition
+  systemd:
+    daemon_reload: true
+
+- name: Start dehydrated timer
+  systemd:
+    daemon_reload: true
+    name: '{{ssl_unit_name}}.timer'
+    state: started
+    enabled: true
+
+- name: Request SSL certificates with dehydrated
+  systemd:
+    daemon_reload: true
+    name: '{{ssl_unit_name}}.service'
+    state: started
+    enabled: false
