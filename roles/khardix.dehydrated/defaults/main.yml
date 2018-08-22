@@ -1,0 +1,6 @@
+---
+# User dedicated to running the dehydrated client
+dehydrated_user: 'dehydrated'
+
+# An API endpoint to direct all requests to
+letsencrypt_api_url: 'https://acme-v02.api.letsencrypt.org/directory'  # Live endpoint!
