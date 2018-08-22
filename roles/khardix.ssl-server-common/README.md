@@ -15,8 +15,7 @@ The role provides the following:
 
 3.  Facts for easy access to aforementioned values in dependent roles, namely:
 
-    -   `ssl_service_name`: The assumed file name of the certificate renewal service (including the `.service` extension).
-    -   `ssl_service_path`: Full path to the expected certificate renewal service unit file.
+    -   `ssl_unit_path`: Full path to the expected certificate renewal service unit file *without extension*.
     -   `ssl_service_dir`: Full path to the "protocol" service override directory.
 
 ## Role Variables
