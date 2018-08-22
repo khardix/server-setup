@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: khardix.ssl-server-common
+      ssl_unit_name: 'test-ssl-unit'
+      ssl_access_group: 'test-access-group'

@@ -1,0 +1,17 @@
+---
+- name: Create SSL access group '{{ssl_access_group}}'
+  group:
+    name: '{{ssl_access_group}}'
+    state: present
+    system: true
+
+- name: Provide SSL-related facts
+  set_fact:
+    ssl_service_name: '{{ssl_unit_name}}.service'
+    ssl_service_path: '/etc/systemd/system/{{ssl_unit_name}}.service'
+    ssl_service_dir: '/etc/systemd/system/{{ssl_unit_name}}.service.d'
+
+- name: Prepare {{ssl_service_name}} override directory
+  file:
+    path: '{{ssl_service_dir}}'
+    state: directory
