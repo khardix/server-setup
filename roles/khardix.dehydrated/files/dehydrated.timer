@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodic renewal of server SSL certificates
+
+[Timer]
+OnCalendar=monthly
+Persistent=true
+RandomizedDelaySec=24hours
+
+[Install]
+WantedBy=timers.target

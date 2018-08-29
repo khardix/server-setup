@@ -1,0 +1,61 @@
+---
+# Base file system setup #
+
+- name: Install dehydrated package
+  package:
+    name: dehydrated
+    state: present
+  notify: Register dehydrated account
+
+- name: Create {{dehydrated_user}} user
+  user:
+    name: '{{dehydrated_user}}'
+    group: '{{ssl_access_group}}'
+    state: present
+    home: /etc/dehydrated
+    shell: /sbin/nologin
+    system: true
+    comment: 'Manager of SSL certificates'
+
+- name: Set configuration owner to {{dehydrated_user}}:{{ssl_access_group}}
+  file:
+    path: /etc/dehydrated
+    state: directory
+    owner: '{{dehydrated_user}}'
+    group: '{{ssl_access_group}}'
+    recurse: true
+
+- name: Make certificate directory readable
+  file:
+    path: /etc/dehydrated/certs
+    state: directory
+    mode: 'u=rwX,g=rX,o='
+
+- name: Create wellknown directory structure
+  file:
+    path: /var/www/dehydrated
+    state: directory
+    owner: '{{dehydrated_user}}'
+    group: '{{ssl_access_group}}'
+    mode: 'u=rwX,g=rX,o='
+
+- name: Configure dehydrated
+  template:
+    src: dehydrated.config
+    dest: /etc/dehydrated/config
+    owner: '{{dehydrated_user}}'
+    group: '{{ssl_access_group}}'
+
+# SystemD #
+
+- name: Install {{ssl_unit_name}}.service
+  notify: Reload ssl unit definition
+  copy:
+    src: dehydrated.service
+    dest: '{{ssl_unit_path}}.service'
+
+- name: Install {{ssl_unit_name}}.timer
+  notify: Start dehydrated timer
+  copy:
+    src: dehydrated.timer
+    dest: '{{ssl_unit_path}}.timer'
