@@ -49,7 +49,7 @@
 # SystemD #
 
 - name: Install {{ssl_unit_name}}.service
-  notify: Reload dehydrated service definition
+  notify: Reload ssl unit definition
   copy:
     src: dehydrated.service
     dest: '{{ssl_unit_path}}.service'

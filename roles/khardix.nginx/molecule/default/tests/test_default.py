@@ -32,3 +32,11 @@ def test_nginx_listens(host, target):
 
     socket = host.socket("tcp://{target}".format(target=target))
     assert socket.is_listening
+
+
+def test_nginx_in_ssl_group(host):
+    """Nginx user is part of the ssl group"""
+
+    nginx = host.user("nginx")
+
+    assert "ssl" in nginx.groups

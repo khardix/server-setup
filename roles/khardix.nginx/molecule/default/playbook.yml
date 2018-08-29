@@ -3,3 +3,4 @@
   hosts: all
   roles:
     - role: "khardix.nginx"
+      ssl_access_group: ssl

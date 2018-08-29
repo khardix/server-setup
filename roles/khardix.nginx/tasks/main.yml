@@ -5,6 +5,13 @@
     state: present
   notify: Start nginx
 
+- name: Enter {{ssl_access_group}} group
+  user:
+    name: nginx
+    groups:
+      - '{{ssl_access_group}}'
+    append: true
+
 - name: Install main configuration
   template:
     src: nginx.conf.j2
@@ -12,6 +19,12 @@
     group: nginx
     mode: 0644
   notify: Reload nginx configuration
+
+- name: Install drop-in for certificate renewal
+  copy:
+    src: reload-nginx.conf
+    dest: '{{ssl_service_dir}}/reload-nginx.conf'
+  notify: Reload ssl unit definition
 
 - name: Prepare configuration directory for virtual hosts
   file:
