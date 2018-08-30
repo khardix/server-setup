@@ -1,8 +1,9 @@
 ---
 dependencies:
-  - name: khardix.sslh-service
+  - role: khardix.sslh-service
     sslh_service: ssh
     sslh_port: 22
+  - role: khardix.firewall
 
 galaxy_info:
   author: Jan "Khardix" Staněk

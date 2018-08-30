@@ -1,4 +1,7 @@
 ---
+- name: Open new ssh port in firewall
+  firewalld: port=443/tcp state=enabled immediate=true permanent=true
+
 - name: Switch to SSLH
   set_fact: ansible_port=443
   when:
@@ -6,12 +9,16 @@
     - not ansible_host.lower().startswith('fe80:')
 
 - name: Verify existing connection
-  ping:
+  ping: ~
+
+- name: Close old ssh port in firewall
+  firewalld: service=ssh state=disabled immediate=true permanent=true
 
 - name: Listen only on internal addresses
   blockinfile:
     path: /etc/ssh/sshd_config
     insertafter: '^#ListenAddress '
+    # yamllint disable rule:line-length
     block: |
       ListenAddress localhost
       {% for addr in ansible_all_ipv4_addresses if addr.startswith('192.168.') %}
@@ -20,7 +27,8 @@
       {% for addr in ansible_all_ipv6_addresses if addr.lower().startswith('fe80:') %}
       ListenAddress [{{addr}}]
       {% endfor %}
-    backup: yes
+    # yamllint enable rule:line-length
+    backup: true
     validate: /usr/sbin/sshd -t -f %s
   notify:
     - Reload sshd
@@ -33,6 +41,7 @@
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^#?PermitRootLogin'
+    # yamllint disable-line rule:line-length
     line: PermitRootLogin {% if ssh_root_key is defined %}without-password{% else %}no{% endif %}
     validate: /usr/sbin/sshd -t -f %s
   notify:
