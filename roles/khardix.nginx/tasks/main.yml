@@ -20,6 +20,16 @@
     mode: 0644
   notify: Reload nginx configuration
 
+- name: Open http/https ports in firewall
+  firewalld:
+    service: '{{item}}'
+    state: enabled
+    immediate: true
+    permanent: true
+  loop:
+    - http
+    - https
+
 - name: Install drop-in for certificate renewal
   copy:
     src: reload-nginx.conf
