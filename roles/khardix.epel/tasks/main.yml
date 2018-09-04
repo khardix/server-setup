@@ -1,3 +1,4 @@
-# tasks file for roles/khardix.epel
+# Enables EPEL on CentOS
 ---
-- include: "{{ansible_distribution}}.yml"
+- name: Install the repository definition
+  package: name=epel-release state=present
