@@ -1,0 +1,6 @@
+---
+- name: Enable firewalld service
+  systemd: name=firewalld.service state=started enabled=true
+
+- name: Reload firewalld service
+  systemd: name=firewalld.service state=restarted

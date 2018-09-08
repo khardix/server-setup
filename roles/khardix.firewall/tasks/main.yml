@@ -1,11 +1,11 @@
 ---
 - name: Install firewalld
   package: name=firewalld state=present
-
-- name: Enable firewalld
-  systemd: name=firewalld.service state=started enabled=true
+  notify: Enable firewalld service
 
 - name: Switch to {{firewalld_zone}} zone
-  command: 'firewall-cmd --set-default-zone={{firewalld_zone}}'
-  register: firewalld_set_default_zone
-  changed_when: "'ZONE_ALREADY_SET' not in firewalld_set_default_zone.stderr"
+  lineinfile:
+    path: /etc/firewalld/firewalld.conf
+    regexp: '^#? ?DefaultZone='
+    line: 'DefaultZone={{firewalld_zone}}'
+  notify: Reload firewalld service
