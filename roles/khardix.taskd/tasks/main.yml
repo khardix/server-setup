@@ -1,0 +1,12 @@
+---
+- name: Install taskd server
+  package: name=khardix-taskd state=present
+  notify: Enable taskd service
+
+- name: Generate server certificates
+  command: /usr/lib/taskd/pki/generate
+  args:
+    creates: /etc/pki/taskd/client.cert.pem
+
+- name: Open firewall port for taskd
+  firewalld: service=taskd state=enabled permanent=true immediate=true
