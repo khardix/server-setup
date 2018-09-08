@@ -1,7 +1,7 @@
 ---
 - hosts: daidalos.khardix.cz
   become: true
-  gather_facts: False
+  gather_facts: false
   pre_tasks:
     - name: Check for correct SSH port
       include_tasks: tasks/determine-ssh-port.yml
@@ -14,3 +14,4 @@
   roles:
     - role: khardix.multi-user  # includes hardened-ssh
       tags: [bootstrap]
+    - role: khardix.taskd
