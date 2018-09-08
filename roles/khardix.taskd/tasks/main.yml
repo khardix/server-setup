@@ -9,4 +9,5 @@
     creates: /etc/pki/taskd/client.cert.pem
 
 - name: Open firewall port for taskd
-  firewalld: service=taskd state=enabled permanent=true immediate=true
+  firewalld: service=taskd state=enabled permanent=true
+  notify: Reload firewalld rules

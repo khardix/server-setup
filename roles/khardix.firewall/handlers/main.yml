@@ -4,3 +4,7 @@
 
 - name: Reload firewalld service
   systemd: name=firewalld.service state=restarted
+
+- name: Reload firewalld rules
+  command: firewall-cmd --reload
+  failed_when: false

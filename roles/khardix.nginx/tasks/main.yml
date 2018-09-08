@@ -24,11 +24,11 @@
   firewalld:
     service: '{{item}}'
     state: enabled
-    immediate: true
     permanent: true
   loop:
     - http
     - https
+  notify: Reload firewalld rules
 
 - name: Install drop-in for certificate renewal
   copy:

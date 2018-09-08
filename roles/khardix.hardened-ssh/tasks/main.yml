@@ -1,6 +1,7 @@
 ---
 - name: Open new ssh port in firewall
-  firewalld: port=443/tcp state=enabled immediate=true permanent=true
+  firewalld: port=443/tcp state=enabled permanent=true
+  notify: Reload firewalld rules
 
 - name: Switch to SSLH
   set_fact: ansible_port=443
@@ -12,7 +13,8 @@
   ping: ~
 
 - name: Close old ssh port in firewall
-  firewalld: service=ssh state=disabled immediate=true permanent=true
+  firewalld: service=ssh state=disabled permanent=true
+  notify: Reload firewalld rules
 
 - name: Listen only on internal addresses
   blockinfile:
