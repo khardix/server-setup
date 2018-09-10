@@ -11,6 +11,11 @@ Dependent services (roles) are expected to open required ports themselves.
 -   `firewalld_zone`: Which zone should the configuration be based upon.
     Defaults to `external`.
 
+-   `firewalld_disable_dbus`: Switch SystemD unit type to `simple` from `dbus`.
+    Defaults to `false`, but should automatically switched to true
+    when the target machine does not support dbus.
+    Currently, this applies only to OpenVZ guests.
+
 ## Example Playbook
 
 ```yaml

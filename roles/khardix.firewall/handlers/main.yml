@@ -3,8 +3,7 @@
   systemd: name=firewalld.service state=started enabled=true
 
 - name: Reload firewalld service
-  systemd: name=firewalld.service state=restarted
+  systemd: name=firewalld.service state=restarted daemon_reload=true
 
 - name: Reload firewalld rules
-  command: firewall-cmd --reload
-  failed_when: false
+  systemd: name=firewalld.service state=reloaded

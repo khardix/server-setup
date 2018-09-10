@@ -3,6 +3,13 @@
   package: name=firewalld state=present
   notify: Enable firewalld service
 
+- name: Disable dbus communication
+  when: firewalld_disable_dbus
+  copy:
+    src: disable-dbus.conf
+    dest: /etc/systemd/system/firewalld.service.d/
+  notify: Reload firewalld service
+
 - name: Switch to {{firewalld_zone}} zone
   lineinfile:
     path: /etc/firewalld/firewalld.conf

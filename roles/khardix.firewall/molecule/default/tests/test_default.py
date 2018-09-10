@@ -29,3 +29,13 @@ def test_all_interfaces_bound_to_zone(host):
     for iface in interfaces:
         zone = host.command(f"firewall-cmd --get-zone-of-interface={iface}")
         assert zone.stdout.strip() == "external" or zone.stderr.strip() == "no zone"
+
+
+def test_firewalld_is_not_controlled_with_dbus(host):
+    """The tested instance does not rely on dbus for firewalld control"""
+
+    service_type = host.command(
+        "systemctl show --property=Type firewalld.service"
+    ).stdout.strip()
+
+    assert "dbus" not in service_type
