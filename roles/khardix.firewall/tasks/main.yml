@@ -1,18 +1,34 @@
 ---
-- name: Install firewalld
-  package: name=firewalld state=present
-  notify: Enable firewalld service
+- name: Install ufw
+  package: name=ufw state=present
+  register: install_ufw
 
-- name: Disable dbus communication
-  when: firewalld_disable_dbus
-  copy:
-    src: disable-dbus.conf
-    dest: /etc/systemd/system/firewalld.service.d/
-  notify: Reload firewalld service
+- name: Clear ufw rules
+  when: install_ufw is changed
+  loop:
+    - user
+    - user6
+  blockinfile:
+    path: '/var/lib/ufw/{{item}}.rules'
+    state: absent
+    marker: '### {mark} ###'
+    marker_begin: RULES
+    marker_end: END RULES
 
-- name: Switch to {{firewalld_zone}} zone
-  lineinfile:
-    path: /etc/firewalld/firewalld.conf
-    regexp: '^#? ?DefaultZone='
-    line: 'DefaultZone={{firewalld_zone}}'
-  notify: Reload firewalld service
+- name: Re-enable ssh
+  become: true
+  ufw: rule=allow port=ssh
+  register: ufw_reenable_ssh
+  retries: 5
+  delay: 1
+  until: ufw_reenable_ssh is succeeded
+
+# The ufw module/command tends to fail when ufw daemon is not running
+# Enable it uncoditionally now, so the dependent roles do not have to care about that
+- name: Enable ufw internally
+  ufw: state=enabled policy=deny direction=incoming
+  tags: [firewall]
+
+- name: Enable ufw in systemd
+  systemd: service=ufw state=started enabled=true
+  tags: [firewall]
