@@ -21,14 +21,10 @@
   notify: Reload nginx configuration
 
 - name: Open http/https ports in firewall
-  firewalld:
-    service: '{{item}}'
-    state: enabled
-    permanent: true
   loop:
     - http
     - https
-  notify: Reload firewalld rules
+  ufw: port={{item}} rule=allow
 
 - name: Install drop-in for certificate renewal
   copy:
