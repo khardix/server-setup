@@ -14,8 +14,10 @@
     marker: '### {mark} ###'
     marker_begin: RULES
     marker_end: END RULES
+  register: clear_ufw_rules
 
 - name: Re-enable ssh
+  when: clear_ufw_rules is changed
   become: true
   ufw: rule=allow port=ssh
   register: ufw_reenable_ssh
@@ -24,7 +26,8 @@
   until: ufw_reenable_ssh is succeeded
 
 # The ufw module/command tends to fail when ufw daemon is not running
-# Enable it uncoditionally now, so the dependent roles do not have to care about that
+# Enable it uncoditionally now, so the dependent roles
+# do not have to care about that
 - name: Enable ufw internally
   ufw: state=enabled policy=deny direction=incoming
   tags: [firewall]
