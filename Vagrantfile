@@ -75,5 +75,10 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "playbook.yml"
       ansible.skip_tags = ENV.fetch('ANSIBLE_SKIP_TAGS', nil)
       ansible.tags = ENV.fetch('ANSIBLE_TAGS', nil)
+      ansible.extra_vars = {
+        ansible_user: 'vagrant',
+        ansible_port: 22,
+        ansible_ssh_private_key_file: './.vagrant/machines/daidalos.khardix.cz/libvirt/private_key',
+      }
   end
 end
