@@ -8,8 +8,10 @@
       when:
         - ansible_port is defined
         - ansible_port != 22
+      tags: [always]
     - name: Gather facts
       setup: ~
+      tags: [always]
 
   roles:
     - role: khardix.multi-user  # includes hardened-ssh
