@@ -1,9 +1,1 @@
 ---
-- name: Enable firewalld service
-  systemd: name=firewalld.service state=started enabled=true
-
-- name: Reload firewalld service
-  systemd: name=firewalld.service state=restarted daemon_reload=true
-
-- name: Reload firewalld rules
-  systemd: name=firewalld.service state=reloaded

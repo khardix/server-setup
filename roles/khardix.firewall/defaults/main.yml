@@ -1,3 +1,0 @@
----
-firewalld_zone: external
-firewalld_disable_dbus: '{{ansible_virtualization_type|default(None) in ["openvz"]}}'

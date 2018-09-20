@@ -6,36 +6,26 @@ from testinfra.utils.ansible_runner import AnsibleRunner
 testinfra_hosts = AnsibleRunner(os.environ["MOLECULE_INVENTORY_FILE"]).get_hosts("all")
 
 
+def test_ufw_service_enabled(host):
+    """UFW service is enabled and running"""
+
+    service = host.service("ufw.service")
+    assert service.is_enabled
+    assert service.is_running
+
+    with host.sudo():
+        status = host.command("ufw status").stdout.strip()
+    assert "inactive" not in status
+
+
 @pytest.mark.parametrize(
-    "service,should_be_opened", [("ssh", True), ("http", False), ("https", False)]
+    "port,should_be_opened", [(22, True), (80, False), (443, False)]
 )
-def test_port_status(host, service, should_be_opened):
+def test_port_status(host, port, should_be_opened):
     """Ensure that key ports are in expected state."""
 
-    open_services = host.command("firewall-cmd --list-services").stdout.split()
+    with host.sudo():
+        open_services = host.command("ufw status").stdout.splitlines()
 
-    if should_be_opened:
-        assert service in open_services
-    else:
-        assert service not in open_services
-
-
-def test_all_interfaces_bound_to_zone(host):
-    """All host interfaces are bound to external zone"""
-
-    interfaces = host.ansible("setup")["ansible_facts"]["ansible_interfaces"]
-    interfaces = filter(lambda iface: iface != "lo", interfaces)
-
-    for iface in interfaces:
-        zone = host.command(f"firewall-cmd --get-zone-of-interface={iface}")
-        assert zone.stdout.strip() == "external" or zone.stderr.strip() == "no zone"
-
-
-def test_firewalld_is_not_controlled_with_dbus(host):
-    """The tested instance does not rely on dbus for firewalld control"""
-
-    service_type = host.command(
-        "systemctl show --property=Type firewalld.service"
-    ).stdout.strip()
-
-    assert "dbus" not in service_type
+    opened = any(line.startswith(format(port, "d")) for line in open_services)
+    assert opened == should_be_opened

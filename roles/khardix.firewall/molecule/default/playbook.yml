@@ -6,4 +6,3 @@
       package: name=iproute state=present
   roles:
     - role: "khardix.firewall"
-      firewalld_disable_dbus: true
