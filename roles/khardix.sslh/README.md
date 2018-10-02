@@ -26,4 +26,4 @@ Also, the playbook should handle the change of SSH port during execution.
 
 ## License
 
-MIT
+GNU AGPL version 3 or later

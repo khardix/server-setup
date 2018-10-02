@@ -1,0 +1,19 @@
+verbose: false;
+foreground: true;   # Handled by systemd
+numeric: true;      # IP only
+user: "sslh";
+
+listen:
+(
+{% set all_addresses = ansible_all_ipv4_addresses|default([]) + ansible_all_ipv6_addresses|default([]) %}
+{% for addr in all_addresses if not addr.startswith('192.168.') and not addr.lower().startswith('fe80:') %}
+    { host: "{{addr}}"; port: "443"; }{{'' if loop.last else ','}}
+{% endfor %}
+);
+
+protocols:
+(
+@include "/etc/sslh.d/protocols.cfg"
+{ name: "anyprot"; host: "localhost"; port: "443"; }
+);
+{# vim:set filetype=cfg.jinja2: #}

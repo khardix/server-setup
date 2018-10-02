@@ -2,20 +2,17 @@
 - name: Install sslh package
   package: name=sslh state=installed
 
-- name: Install service file
-  copy: src=sslh.service dest=/etc/systemd/system/sslh.service
-  notify:
-    - Reload SSLH
-
-- name: Install socket file
-  template: src=sslh.socket dest=/etc/systemd/system/sslh.socket
-  notify:
-    - Reload SSLH
-
 - name: Create snippets directory
   file: path=/etc/sslh.d/proto.d state=directory
 
 - name: Install configuration file
-  copy: src=sslh.cfg dest=/etc/sslh.cfg
+  template: src=sslh.cfg.j2 dest=/etc/sslh.cfg
   notify:
+    - Assemble SSLH protocol configuration
     - Reload SSLH
+
+- name: Prepare initial configuration
+  meta: flush_handlers
+
+- name: Start and enable sslh.service
+  service: name=sslh.service state=started enabled=true
