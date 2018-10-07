@@ -4,9 +4,6 @@ Documentation=man:sslh(8)
 After=network.target
 
 [Service]
-# Explicit user switching
-User=sslh
-AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_NET_ADMIN
 # Preparation
 RuntimeDirectory=sslh
 ExecStartPre=/usr/bin/python3 /usr/libexec/sslh/generate-listen.py -o %t/sslh/listen.cfg
