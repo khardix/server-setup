@@ -1,8 +1,6 @@
 ---
 dependencies:
-  - role: khardix.sslh-service
-    sslh_service: ssh
-    sslh_port: 22
+  - role: khardix.sslh
   - role: khardix.firewall
 
 galaxy_info:
