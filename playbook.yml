@@ -1,5 +1,5 @@
 ---
-- hosts: daidalos.khardix.cz
+- hosts: all
   become: true
   gather_facts: false
   pre_tasks:
