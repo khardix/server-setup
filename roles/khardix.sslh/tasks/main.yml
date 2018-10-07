@@ -1,21 +1,29 @@
 ---
-- name: Install sslh package
-  package: name=sslh state=installed
+- name: Install sslh and supporting packages
+  package:
+    name: [sslh, iproute, python34]
 
-- name: Install service file
-  copy: src=sslh.service dest=/etc/systemd/system/sslh.service
-  notify:
-    - Reload SSLH
+- name: Provide /usr/libexec/sslh
+  file:
+    path: /usr/libexec/sslh
+    state: directory
+    owner: sslh
+    mode: 0755
 
-- name: Install socket file
-  template: src=sslh.socket dest=/etc/systemd/system/sslh.socket
-  notify:
-    - Reload SSLH
-
-- name: Create snippets directory
-  file: path=/etc/sslh.d/proto.d state=directory
+- name: Install configuration generator
+  copy:
+    src: generate-listeners.py
+    dest: /usr/libexec/sslh/generate-listen.py
+    mode: 0750
+    owner: sslh
 
 - name: Install configuration file
   copy: src=sslh.cfg dest=/etc/sslh.cfg
-  notify:
-    - Reload SSLH
+
+- name: Install systemd service
+  copy:
+    src: sslh.service
+    dest: /etc/systemd/system/sslh.service
+
+- name: Start and enable sslh.service
+  service: name=sslh.service state=started enabled=true daemon_reload=true

@@ -7,7 +7,7 @@ This role adjusts the SSH daemon configuration to more hardened values:
 
 ## Dependencies
 
--   `khardix.sslh-service`
+-   `khardix.sslh`
 
 ## Role variables
 
