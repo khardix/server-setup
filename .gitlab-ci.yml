@@ -1,0 +1,62 @@
+# Gitlab CI for running molecule tests
+---
+# Global configuration
+stages:
+  - build
+  - test
+
+services:
+  - 'docker:dind'
+
+variables:
+  DOCKER_HOST: 'tcp://docker:2375/'
+  DOCKER_DRIVER: 'overlay2'
+  MOLECULE_IMAGE:
+    &molecule_image 'registry.gitlab.com/khardix/server-setup/molecule:latest'
+
+# Docker build
+build:docker:
+  stage: build
+  image: docker:stable
+  only:
+    changes:
+      - Dockerfile
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker build -t "$MOLECULE_IMAGE" .
+    - docker push "$MOLECULE_IMAGE"
+
+# Role test template
+.test-template: &role_test
+  image: *molecule_image
+  script:
+    - molecule test
+
+# Test themselves
+
+test:epel:
+  <<: *role_test
+  before_script:
+    - cd roles/khardix.epel
+
+test:server-ports:
+  <<: *role_test
+  before_script:
+    - cd roles/khardix.server-ports
+
+test:sslh:
+  <<: *role_test
+  before_script:
+    - cd roles/khardix.sslh
+
+# IPv6
+# test:firewall:
+#   <<: *role_test
+#   before_script:
+#     - cd roles/khardix.firewall
+
+# IPv6
+# test:taskd:
+#   <<: *role_test
+#   before_script:
+#     - cd roles/khardix.taskd
