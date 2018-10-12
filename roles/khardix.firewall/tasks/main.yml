@@ -3,6 +3,18 @@
   package: name=ufw state=present
   register: install_ufw
 
+- name: Disable IPv6 if unsupported
+  lineinfile:
+    state: present
+    path: /etc/default/ufw
+    regexp: '^IPV6='
+    line: 'IPV6=no'
+  when:
+    - install_ufw is changed
+    - >-
+      ansible_all_ipv6_addresses is undefined
+      or not ansible_all_ipv6_addresses
+
 - name: Clear ufw rules
   when: install_ufw is changed
   loop:
