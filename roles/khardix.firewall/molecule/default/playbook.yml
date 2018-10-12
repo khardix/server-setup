@@ -1,8 +1,11 @@
 ---
 - name: Converge
   hosts: all
+  gather_facts: false  # needs ip installed before gathering facts
   pre_tasks:
     - name: Install the ip utility
       package: name=iproute state=present
+    - name: Gather facts
+      setup: ~
   roles:
     - role: "khardix.firewall"
