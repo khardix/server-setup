@@ -1,0 +1,13 @@
+---
+- name: Install required packages
+  package:
+    state: present
+    name:
+      - openssl
+      - gnutls-utils
+      - nginx
+      - nginx-mod-http-perl
+      - dehydrated
+
+# Bootstrap TLS, so that nginx can start before dehydrated
+- import_tasks: tls-bootstrap.yml

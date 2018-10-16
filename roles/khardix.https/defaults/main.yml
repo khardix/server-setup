@@ -1,0 +1,9 @@
+---
+# Staging API endpoint
+# letsencrypt_api_url: 'https://acme-staging-v02.api.letsencrypt.org/directory'
+
+# Live API endpoint
+letsencrypt_api_url: 'https://acme-v02.api.letsencrypt.org/directory'
+
+# Dehydrated user/group name
+dehydrated_user: dehydrated
