@@ -11,3 +11,5 @@
 
 # Bootstrap TLS, so that nginx can start before dehydrated
 - import_tasks: tls-bootstrap.yml
+# Configure common nginx settings
+- import_tasks: nginx.yml

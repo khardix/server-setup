@@ -1,0 +1,21 @@
+---
+- name: Prepare vhost configuration root
+  file:
+    path: '/etc/nginx/sites-enabled'
+    state: directory
+    mode: 0755
+
+- name: Install main nginx configuration
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: 0644
+    trim_blocks: false
+  notify:
+    - Reload nginx configuration
+
+- name: Open HTTP port in firewall
+  ufw: port=http rule=allow
+
+- name: Start nginx service
+  service: name=nginx state=started enabled=true

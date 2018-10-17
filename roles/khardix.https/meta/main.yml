@@ -13,4 +13,5 @@ galaxy_info:
 
 dependencies:
   - role: khardix.epel
+  - role: khardix.firewall
   - role: khardix.sslh
