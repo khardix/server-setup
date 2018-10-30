@@ -17,3 +17,4 @@
     - role: khardix.multi-user  # includes hardened-ssh
       tags: [bootstrap]
     - role: khardix.taskd
+      tags: [taskd]
