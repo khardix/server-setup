@@ -18,3 +18,5 @@
       tags: [bootstrap]
     - role: khardix.taskd
       tags: [taskd]
+    - role: khardix.https
+      tags: [https]
