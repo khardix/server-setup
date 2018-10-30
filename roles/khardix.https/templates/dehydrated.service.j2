@@ -1,0 +1,12 @@
+{# vim:set filetype=systemd.jinja2: #}
+[Unit]
+Description=Automatic renewal of HTTPS certificates
+Documentation=man:dehydrated(1) https://github.com/lukas2511/dehydrated/
+PartOf=dehydrated.timer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/runuser -u {{dehydrated_user}} -- /usr/bin/dehydrated --cron
+ExecStartPost=/usr/bin/systemctl reload nginx.service

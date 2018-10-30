@@ -1,0 +1,70 @@
+---
+- name: Create '{{dehydrated_user}}' user
+  user:
+    name: '{{dehydrated_user}}'
+    state: present
+    system: true
+    comment: "Let's Encrypt automation"
+    groups: [https]
+    home: /var/lib/dehydrated
+    create_home: true
+    shell: /sbin/nologin
+
+- name: Provide working directories
+  file:
+    path: '{{item.path}}'
+    state: directory
+    mode: '{{item.mode}}'
+    owner: '{{item.owner|default(omit)}}'
+  loop:
+    - path: /etc/dehydrated
+      mode: '0755'
+    - path: /var/lib/dehydrated
+      mode: '0700'
+      owner: '{{dehydrated_user}}'
+    - path: /var/www/dehydrated
+      mode: '0755'
+      owner: '{{dehydrated_user}}'
+
+- name: Install dehydrated hook handler
+  copy:
+    src: dehydrated.hook.sh
+    dest: /var/lib/dehydrated/hook.sh
+    mode: 0500
+    owner: '{{dehydrated_user}}'
+
+- name: Add '{{ansible_fqdn}}' to managed domains
+  lineinfile:
+    path: /etc/dehydrated/domains.txt
+    create: true
+    line: '{{ansible_fqdn}}'
+    mode: 0644
+
+- name: Install dehydrated configuration
+  template:
+    src: dehydrated.conf.j2
+    dest: /etc/dehydrated/config
+    mode: 0644
+
+- name: Accept CA's terms of service
+  become: true
+  become_user: '{{dehydrated_user}}'
+  command: 'dehydrated --register --accept-terms'
+  args:
+    creates: "/var/lib/dehydrated/accounts/{{'%s\n'|format(letsencrypt_api_url)|b64encode|regex_replace('=*$', '')}}/registration_info.json"
+
+- name: Install dehydrated service
+  template:
+    src: dehydrated.service.j2
+    dest: /etc/systemd/system/dehydrated.service
+  notify:
+    - Reload SystemD definitions
+    - Request certificates with dehydrated
+
+- name: Install dehydrated timer
+  copy:
+    src: dehydrated.timer
+    dest: /etc/systemd/system/dehydrated.timer
+  notify:
+    - Reload SystemD definitions
+    - Start dehydrated timer

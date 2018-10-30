@@ -1,5 +1,0 @@
----
-- name: Start nginx
-  service: name=nginx.service state=started enabled=yes
-- name: Reload nginx configuration
-  service: name=nginx.service state=reloaded

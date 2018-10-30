@@ -1,0 +1,28 @@
+                          # dehydrated configuration #
+                             # managed by Ansible #
+
+# Contact email for administrator
+CONTACT_EMAIL="{{letsencrypt_contact_email}}"
+
+# User responsible for certificate management
+DEHYDRATED_USER="{{dehydrated_user}}"
+
+# Used endpoint of the CA's API
+CA="{{letsencrypt_api_url}}"
+
+# Root of the working directory
+BASEDIR=/var/lib/dehydrated
+
+# Domain configuration
+DOMAINS_TXT=/etc/dehydrated/domains.txt
+
+# Well-known root -- has to correspond to /.well-known/acme-challenge; world-readable
+WELLKNOWN=/var/www/dehydrated
+
+# Hook script
+HOOK="${BASEDIR}/hook.sh"
+
+# Algorithm used for key generation
+KEY_ALGO=secp384r1
+
+{# vim:set filetype=sh.jinja2: #}

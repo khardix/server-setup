@@ -17,6 +17,7 @@ PLAYGROUND = ["ikaros.khardix.cz"]
 VF_API_ROOT = "https://api.vpsfree.cz/5.0"
 PASS_VF_CREDENTIALS = "www/vpsfree.cz"
 
+
 # New named types
 Json = Union[str, dict]
 
@@ -167,7 +168,9 @@ def list(session):
 
     return {
         "_meta": {"hostvars": hostvars},
-        "all": {"children": ["production", "playground"]},
+        "all": {"children": ["public"]},
+        # public: differentiate from non-internet-visible VMs and images
+        "public": {"children": ["production", "playground"]},
         "production": [host for host in PRODUCTION if host in hostvars],
         "playground": [host for host in PLAYGROUND if host in hostvars],
     }

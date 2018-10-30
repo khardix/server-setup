@@ -1,0 +1,7 @@
+# Self-signed bootstrap TLS certificate template
+
+organization  = Temporary Bootstrap Certificate
+cn            = bootstrap.example.com
+dns_name      = bootstrap.example.com
+
+expiration_days = 1

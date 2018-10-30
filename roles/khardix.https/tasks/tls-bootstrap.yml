@@ -1,0 +1,42 @@
+---
+- name: Provide TLS collaboration group
+  group:
+    name: https
+    system: true
+    state: present
+
+- name: Prepare certificate root directory
+  file:
+    path: /etc/pki/https
+    state: directory
+    mode: 02770
+    group: https
+
+- name: Install bootstrap certificate template
+  copy: src=bootstrap.template dest=/etc/pki/https/bootstrap.template
+
+- name: Generate D-H exchange parameters
+  command: 'openssl dhparam -out dhparam.pem 2048'
+  args:
+    chdir: /etc/pki/https
+    creates: dhparam.pem
+
+- name: Prepare {{ansible_fqdn}} certificate directory
+  file:
+    path: '/etc/pki/https/{{ansible_fqdn}}'
+    state: directory
+    mode: 02770
+    group: https
+
+- name: Generate {{ansible_fqdn}} bootstrap certificate
+  args:
+    chdir: '/etc/pki/https/{{ansible_fqdn}}'
+    creates: fullchain.pem
+  shell: |
+    set -e
+    certtool --generate-privkey --ecc --curve=secp384r1 --outfile=privkey.pem
+    certtool --generate-self-signed \
+      --template=/etc/pki/https/bootstrap.template \
+      --load-privkey=privkey.pem \
+      --outfile=fullchain.pem
+    chmod 0600 *.pem && chown root:https *.pem

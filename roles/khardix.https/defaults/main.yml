@@ -1,0 +1,20 @@
+---
+# ### Let's Encrypt
+
+# Administrator contact for certificate expiration and similar notices
+letsencrypt_contact_email: 'admin@{{ansible_fqdn}}'
+
+# Toggle between live and staging API endpoints
+letsencrypt_use_live: false
+
+# URL of the API endpoint to use
+letsencrypt_api_url: >-
+  {{'https://acme-v02.api.letsencrypt.org/directory' if letsencrypt_use_live else 'https://acme-staging-v02.api.letsencrypt.org/directory'}}
+
+# ### dehydrated #
+
+# Dedicated user/group name for running dehydrated
+dehydrated_user: dehydrated
+
+# Actually request certificates for any configured domain(s)
+dehydrated_run_request: false
