@@ -13,10 +13,25 @@
       setup: ~
       tags: [always]
 
-  roles:
+  roles:  # Basic setup
     - role: khardix.multi-user  # includes hardened-ssh
       tags: [bootstrap]
-    - role: khardix.taskd
+
+  tasks:
+    # Dynamic roles
+    - name: Configure taskwarrior server
+      include_role:
+        name: khardix.taskd
+        apply: {tags: [taskd]}
       tags: [taskd]
-    - role: khardix.https
-      tags: [https]
+
+    - name: Configure static sites
+      tags: [website]
+      include_role:
+        name: khardix.website
+        apply: {tags: [website]}
+      loop: '{{hosted_static_sites|default([])}}'
+      loop_control: {loop_var: website}
+      vars:
+        website_owner: '{{website.owner}}'
+        website_hostname_list: '{{website.hostname_list}}'

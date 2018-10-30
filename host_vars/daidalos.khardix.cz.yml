@@ -5,3 +5,7 @@ ansible_port: 443
 ansible_ssh_private_key_file: '{{query("fileglob", "~/.ssh/daidalos*")[0]}}'
 
 letsencrypt_contact_email: 'khardix@gmail.com'
+
+hosted_static_sites:
+  - hostname_list: [khardix.cz, www.khardix.cz]
+    owner: khardix
