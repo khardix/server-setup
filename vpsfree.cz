@@ -79,10 +79,13 @@ def vf_attach_ip(session: requests.Session, vps: dict) -> dict:
         requests.HTTPError: IP query was rejected by API.
     """
 
-    response = vf_query(session, f"vpses/{vps['id']}/ip_addresses")
+    NAMESPACE = "host_ip_addresses"
+
+    response = vf_query(
+        session, NAMESPACE, parameters={"host_ip_address[vps]": vps["id"]}
+    )
     return dict(
-        vps,
-        ip_addresses=[addr["addr"] for addr in response["response"]["ip_addresses"]],
+        vps, ip_addresses=[addr["addr"] for addr in response["response"][NAMESPACE]]
     )
 
 
