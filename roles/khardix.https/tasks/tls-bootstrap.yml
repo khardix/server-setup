@@ -1,9 +1,16 @@
 ---
+- name: Provide TLS collaboration group
+  group:
+    name: https
+    system: true
+    state: present
+
 - name: Prepare certificate root directory
   file:
     path: /etc/pki/https
     state: directory
-    mode: 0755
+    mode: 02770
+    group: https
 
 - name: Install bootstrap certificate template
   copy: src=bootstrap.template dest=/etc/pki/https/bootstrap.template
@@ -18,8 +25,8 @@
   file:
     path: '/etc/pki/https/{{ansible_fqdn}}'
     state: directory
-    mode: 0700
-    owner: nginx
+    mode: 02770
+    group: https
 
 - name: Generate {{ansible_fqdn}} bootstrap certificate
   args:
@@ -32,4 +39,4 @@
       --template=/etc/pki/https/bootstrap.template \
       --load-privkey=privkey.pem \
       --outfile=fullchain.pem
-    chmod 0600 *.pem && chown nginx:nginx *.pem
+    chmod 0600 *.pem && chown root:https *.pem

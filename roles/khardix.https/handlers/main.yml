@@ -1,3 +1,14 @@
 ---
+- name: Reload SystemD definitions
+  systemd: daemon_reload=true
+
 - name: Reload nginx configuration
   service: name=nginx state=reloaded
+
+- name: Request certificates with dehydrated
+  when: dehydrated_run_request
+  systemd: name=dehydrated.service state=started
+
+- name: Start dehydrated timer
+  when: dehydrated_run_request
+  systemd: name=dehydrated.timer state=started enabled=true

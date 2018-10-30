@@ -43,7 +43,13 @@ http {
         listen [::1]:443        default_server ssl http2;
         {%- endif %}
 
-        return 444;             # End connection immediately
+        location /.well-known/acme-challenge/ {
+            alias /var/www/dehydrated/;
+        }
+
+        location / {
+            return 444;         # End connection immediately
+        }
     }
 
     # Virtual hosts

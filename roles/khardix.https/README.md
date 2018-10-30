@@ -5,12 +5,17 @@ Base setup of nginx as modular webserver, with TLS automation via letsencrypt.
 ## Role variables
 
 -   `letsencrypt_contact_email`: Contact e-mail for CA communication,
-    will receive expiration notifications (no default, **recommended**).
+    will receive expiration notifications (default: `admin@{{ansible_fqdn}}`).
+
+-   `letsencrypt_use_live`: Easy toggle between official live and staging
+    API endpoints (default: false).
 
 -   `letsencrypt_api_url`: The URL fo CA API endpoint for certificate requests
-    (default: Live Let's Encrypt API endpoint).
+    (obeys `letsencrypt_use_live` by default).
 
--   `dehydrated_user`: User/group name for privilege dropping (default: `dehydrated`).
+-   `dehydrated_user`: User/group name for privilege dropping (default: `dehydrated`).
+
+-   `dehydrated_run_request`: Actually request certificates as configured (default: false).
 
 ## Dependencies
 
@@ -23,6 +28,8 @@ Base setup of nginx as modular webserver, with TLS automation via letsencrypt.
 - hosts: servers
   roles:
     - role: khardix.https
+      letsencrypt_use_live: true
+      letsencrypt_contact_email: 'khardix@gmail.com'
 ```
 
 ## License

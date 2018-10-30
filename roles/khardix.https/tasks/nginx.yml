@@ -1,4 +1,11 @@
 ---
+- name: Add nginx user to https group
+  user:
+    name: nginx
+    state: present
+    append: true
+    groups: [https]
+
 - name: Prepare vhost configuration root
   file:
     path: '/etc/nginx/sites-enabled'
