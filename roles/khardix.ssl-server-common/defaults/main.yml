@@ -1,6 +1,0 @@
----
-# Name of the user group with read access to server SSL certificates and keys
-ssl_access_group: 'ssl'
-
-# Expected name of SystemD unit that will manage the renewal of SSL certificates
-ssl_unit_name: 'ssl-cert-refresh'

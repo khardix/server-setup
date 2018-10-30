@@ -1,3 +1,0 @@
----
-- name: Reload ssl unit definition
-  systemd: daemon_reload=true
