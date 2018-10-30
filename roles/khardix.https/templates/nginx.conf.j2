@@ -35,13 +35,10 @@ http {
     ssl_session_tickets off;
     ssl_session_timeout 1d;
 
-    # Default host
+    # Default hosts -- have to be separate to support separate vhost configuration
+    # HTTP
     server {
         listen [::]:80          default_server ipv6only=off;
-        listen 127.0.0.1:443    default_server ssl http2;
-        {%- if ansible_lo.ipv6 is defined and ansible_lo.ipv6 %}
-        listen [::1]:443        default_server ssl http2;
-        {%- endif %}
 
         location /.well-known/acme-challenge/ {
             alias /var/www/dehydrated/;
@@ -50,6 +47,16 @@ http {
         location / {
             return 444;         # End connection immediately
         }
+    }
+
+    # HTTPS
+    server {
+        listen 127.0.0.1:443    default_server ssl http2;
+        {%- if ansible_lo.ipv6 is defined and ansible_lo.ipv6 %}
+        listen [::1]:443        default_server ssl http2;
+        {%- endif %}
+
+        return 444;             # End connection immediately
     }
 
     # Virtual hosts
