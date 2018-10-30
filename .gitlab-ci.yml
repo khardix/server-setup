@@ -61,7 +61,7 @@ test:taskd:
   before_script:
     - cd roles/khardix.taskd
 
-test:https:
+test:website:  # also tests roles/khardix.https
   <<: *role_test
   before_script:
-    - cd roles/khardix.https
+    - cd roles/khardix.website
