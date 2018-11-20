@@ -2,9 +2,7 @@
 active_users:
   - name: khardix
     ssh_key: >-
-      ecdsa-sha2-nistp256
-      AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC2N0ukaXYOKXatbXsAoju2HgHFgsStEGHVFssabHvKnpL40+kxSWqhBsKJ1PWgL3vBQwRY05TnAeHL/P26DK2Y=
-      khardix@neltharion
+      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIABrLcUAORKMejx5ZHm2rtjmchY58JFz58X9sNv/PfRR openpgp:0xC5CC249C
     password_hash: >-
       $6$sGLzNKxyIfxnb$UXpZaSdS5RH.rnJr/HV.8fo/Rvql0qzByNzmdhBFiarUnx0heweHVNFYiNtW4IAk62xTbJn.Rcp6ej1HV6D.Y0
     admin: true
