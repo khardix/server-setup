@@ -4,7 +4,9 @@
   gather_facts: false
   pre_tasks:
     - name: Check for correct SSH port
-      include_tasks: tasks/determine-ssh-port.yml
+      include_tasks:
+        file: tasks/determine-ssh-port.yml
+        apply: {tags: [always]}
       when:
         - ansible_port is defined
         - ansible_port != 22
