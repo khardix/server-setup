@@ -12,7 +12,7 @@ import click
 import requests
 
 PRODUCTION = ["daidalos.khardix.cz"]
-PLAYGROUND = ["ikaros.khardix.cz"]
+PLAYGROUND = ["ikaros.khardix.cz", "helios.khardix.cz"]
 
 VF_API_ROOT = "https://api.vpsfree.cz/5.0"
 PASS_VF_CREDENTIALS = "www/vpsfree.cz"

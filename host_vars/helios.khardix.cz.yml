@@ -1,0 +1,10 @@
+---
+ansible_user: khardix
+ansible_become_pass: '{{lookup("passwordstore", "sudo/daidalos.khardix.cz")}}'
+ansible_port: 443
+
+letsencrypt_contact_email: 'khardix@gmail.com'
+
+hosted_static_sites:
+  - hostname_list: ['{{ansible_fqdn}}']
+    owner: khardix
