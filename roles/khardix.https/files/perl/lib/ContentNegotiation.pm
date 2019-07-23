@@ -6,7 +6,7 @@ use warnings;
 use Locale::Util qw(parse_http_accept_language);
 use List::MoreUtils qw(any);
 
-sub accept_lang {
+sub accept_language {
     my $header = shift;
     my @supported = @_;
 
@@ -20,3 +20,4 @@ sub accept_lang {
 }
 
 1;
+__END__
