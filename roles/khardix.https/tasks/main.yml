@@ -3,11 +3,14 @@
   package:
     state: present
     name:
-      - openssl
+      - 'perl(List::MoreUtils)'
+      - 'perl(Locale::Util)'
+      - 'perl(Test::Simple)'
+      - dehydrated
       - gnutls-utils
       - nginx
       - nginx-mod-http-perl
-      - dehydrated
+      - openssl
 
 # Bootstrap TLS, so that nginx can start before dehydrated
 - import_tasks: tls-bootstrap.yml

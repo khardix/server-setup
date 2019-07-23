@@ -67,3 +67,17 @@ def test_nginx_listens(host, expected_socket):
 
     description = "tcp://{}".format(expected_socket)
     assert host.socket(description).is_listening
+
+
+def test_perl_extensions_pass_tests(host):
+    """Installed perl extentions pass installed tests"""
+
+    test_script = [
+        "cd /etc/nginx/perl",
+        "for t in t/*.t",
+        "do perl -Ilib $t || exit $?",
+        "done",
+    ]
+
+    results = host.run(";".join(test_script))
+    assert results.rc == 0

@@ -6,6 +6,19 @@
     append: true
     groups: [https]
 
+- name: Prepare perl extensions root
+  file:
+    path: '/etc/nginx/perl/'
+    state: directory
+    mode: 0755
+
+- name: Install perl extensions
+  copy:
+    src: 'perl/'
+    dest: '/etc/nginx/perl/'
+    owner: root
+    mode: 0755
+
 - name: Prepare vhost configuration root
   file:
     path: '/etc/nginx/sites-enabled'
