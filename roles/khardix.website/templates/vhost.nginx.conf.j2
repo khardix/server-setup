@@ -29,6 +29,23 @@ server {
     ssl_certificate_key /etc/pki/https/{{website_cn}}/privkey.pem;
 
     {%- block locations %}
+    {% if website_i18n_subsites is defined and website_i18n_subsites %}
+    location = / {
+        # Automatically redirect to the best possible language
+        perl 'sub {
+            my $r = shift;
+
+            my $selected = ContentNegotiation::accept_language(
+                $r->header_in("Accept-Language"),
+                {{ website_i18n_subsites|map('to_json')|join(', ') }}
+            );
+
+            $r->header_out("Location", "/${selected}/");
+            return HTTP_SEE_OTHER;
+        }';
+    }
+    {% endif %}
+
     location / {
         root        /srv/http/{{website_cn}};
         index       index.html index.htm;
