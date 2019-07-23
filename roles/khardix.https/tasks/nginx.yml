@@ -8,14 +8,14 @@
 
 - name: Prepare perl extensions root
   file:
-    path: '/etc/nginx/perl/'
+    path: '/usr/share/nginx/perl/'
     state: directory
     mode: 0755
 
 - name: Install perl extensions
   copy:
     src: 'perl/'
-    dest: '/etc/nginx/perl/'
+    dest: '/usr/share/nginx/perl/'
     owner: root
     mode: 0755
 

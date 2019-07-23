@@ -73,7 +73,7 @@ def test_perl_extensions_pass_tests(host):
     """Installed perl extentions pass installed tests"""
 
     test_script = [
-        "cd /etc/nginx/perl",
+        "cd /usr/share/nginx/perl",
         "for t in t/*.t",
         "do perl -Ilib $t || exit $?",
         "done",
