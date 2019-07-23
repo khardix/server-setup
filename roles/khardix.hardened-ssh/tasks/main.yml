@@ -26,7 +26,7 @@
 
 - name: Add root key
   when: ssh_root_key is defined
-  authorized_key: user=root key={{ssh_root_key}}
+  authorized_key: user=root key={{ ssh_root_key }}
 
 - name: Tighten root login
   lineinfile:

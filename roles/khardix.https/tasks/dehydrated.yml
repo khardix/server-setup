@@ -1,7 +1,7 @@
 ---
-- name: Create '{{dehydrated_user}}' user
+- name: Create '{{ dehydrated_user }}' user
   user:
-    name: '{{dehydrated_user}}'
+    name: '{{ dehydrated_user }}'
     state: present
     system: true
     comment: "Let's Encrypt automation"
@@ -12,32 +12,32 @@
 
 - name: Provide working directories
   file:
-    path: '{{item.path}}'
+    path: '{{ item.path }}'
     state: directory
-    mode: '{{item.mode}}'
-    owner: '{{item.owner|default(omit)}}'
+    mode: '{{ item.mode }}'
+    owner: '{{ item.owner|default(omit) }}'
   loop:
     - path: /etc/dehydrated
       mode: '0755'
     - path: /var/lib/dehydrated
       mode: '0700'
-      owner: '{{dehydrated_user}}'
+      owner: '{{ dehydrated_user }}'
     - path: /var/www/dehydrated
       mode: '0755'
-      owner: '{{dehydrated_user}}'
+      owner: '{{ dehydrated_user }}'
 
 - name: Install dehydrated hook handler
   copy:
     src: dehydrated.hook.sh
     dest: /var/lib/dehydrated/hook.sh
     mode: 0500
-    owner: '{{dehydrated_user}}'
+    owner: '{{ dehydrated_user }}'
 
-- name: Add '{{ansible_fqdn}}' to managed domains
+- name: Add '{{ ansible_fqdn }}' to managed domains
   lineinfile:
     path: /etc/dehydrated/domains.txt
     create: true
-    line: '{{ansible_fqdn}}'
+    line: '{{ ansible_fqdn }}'
     mode: 0644
 
 - name: Install dehydrated configuration
@@ -48,10 +48,11 @@
 
 - name: Accept CA's terms of service
   become: true
-  become_user: '{{dehydrated_user}}'
+  become_user: '{{ dehydrated_user }}'
   command: 'dehydrated --register --accept-terms'
   args:
-    creates: "/var/lib/dehydrated/accounts/{{'%s\n'|format(letsencrypt_api_url)|b64encode|regex_replace('=*$', '')}}/registration_info.json"
+    # yamllint disable-line rule:line-length
+    creates: "/var/lib/dehydrated/accounts/{{ '%s\n'|format(letsencrypt_api_url)|b64encode|regex_replace('=*$', '') }}/registration_info.json"
 
 - name: Install dehydrated service
   template:

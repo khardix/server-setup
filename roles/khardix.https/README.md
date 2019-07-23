@@ -5,7 +5,7 @@ Base setup of nginx as modular webserver, with TLS automation via letsencrypt.
 ## Role variables
 
 -   `letsencrypt_contact_email`: Contact e-mail for CA communication,
-    will receive expiration notifications (default: `admin@{{ansible_fqdn}}`).
+    will receive expiration notifications (default: `admin@{{ ansible_fqdn }}`).
 
 -   `letsencrypt_use_live`: Easy toggle between official live and staging
     API endpoints (default: false).

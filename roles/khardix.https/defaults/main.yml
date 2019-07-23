@@ -2,7 +2,7 @@
 # ### Let's Encrypt
 
 # Administrator contact for certificate expiration and similar notices
-letsencrypt_contact_email: 'admin@{{ansible_fqdn}}'
+letsencrypt_contact_email: 'admin@{{ ansible_fqdn }}'
 
 # Toggle between live and staging API endpoints
 letsencrypt_use_live: false

@@ -8,5 +8,5 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/runuser -u {{dehydrated_user}} -- /usr/bin/dehydrated --cron
+ExecStart=/usr/sbin/runuser -u {{ dehydrated_user }} -- /usr/bin/dehydrated --cron
 ExecStartPost=/usr/bin/systemctl reload nginx.service

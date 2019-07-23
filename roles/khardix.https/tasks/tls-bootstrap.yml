@@ -21,16 +21,16 @@
     chdir: /etc/pki/https
     creates: dhparam.pem
 
-- name: Prepare {{ansible_fqdn}} certificate directory
+- name: Prepare {{ ansible_fqdn }} certificate directory
   file:
-    path: '/etc/pki/https/{{ansible_fqdn}}'
+    path: '/etc/pki/https/{{ ansible_fqdn }}'
     state: directory
     mode: 02770
     group: https
 
-- name: Generate {{ansible_fqdn}} bootstrap certificate
+- name: Generate {{ ansible_fqdn }} bootstrap certificate
   args:
-    chdir: '/etc/pki/https/{{ansible_fqdn}}'
+    chdir: '/etc/pki/https/{{ ansible_fqdn }}'
     creates: fullchain.pem
   shell: |
     set -e

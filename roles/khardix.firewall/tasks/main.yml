@@ -21,7 +21,7 @@
     - user
     - user6
   blockinfile:
-    path: '/var/lib/ufw/{{item}}.rules'
+    path: '/var/lib/ufw/{{ item }}.rules'
     state: absent
     marker: '### {mark} ###'
     marker_begin: RULES

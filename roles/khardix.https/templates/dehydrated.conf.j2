@@ -2,13 +2,13 @@
                              # managed by Ansible #
 
 # Contact email for administrator
-CONTACT_EMAIL="{{letsencrypt_contact_email}}"
+CONTACT_EMAIL="{{ letsencrypt_contact_email }}"
 
 # User responsible for certificate management
-DEHYDRATED_USER="{{dehydrated_user}}"
+DEHYDRATED_USER="{{ dehydrated_user }}"
 
 # Used endpoint of the CA's API
-CA="{{letsencrypt_api_url}}"
+CA="{{ letsencrypt_api_url }}"
 
 # Root of the working directory
 BASEDIR=/var/lib/dehydrated

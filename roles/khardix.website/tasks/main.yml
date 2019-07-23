@@ -1,28 +1,28 @@
 ---
 # Facts
-- name: 'Declare website CN: {{website_hostname_list|first}}'
+- name: 'Declare website CN: {{ website_hostname_list|first }}'
   set_fact:
-    website_cn: '{{website_hostname_list|first}}'
+    website_cn: '{{ website_hostname_list|first }}'
 
 # Filesystem
-- name: 'Prepare root directory /srv/http/{{website_cn}}'
+- name: 'Prepare root directory /srv/http/{{ website_cn }}'
   file:
-    path: '/srv/http/{{website_cn}}'
+    path: '/srv/http/{{ website_cn }}'
     state: directory
     mode: 0755
-    owner: '{{website_owner}}'
+    owner: '{{ website_owner }}'
 
 # TLS Certificates
-- name: 'Prepare certificate directory /etc/pki/https/{{website_cn}}'
+- name: 'Prepare certificate directory /etc/pki/https/{{ website_cn }}'
   file:
-    path: '/etc/pki/https/{{website_cn}}'
+    path: '/etc/pki/https/{{ website_cn }}'
     state: directory
     mode: 02770
     group: https
 
-- name: 'Bootstrap {{website_cn}} certificates'
+- name: 'Bootstrap {{ website_cn }} certificates'
   args:
-    chdir: '/etc/pki/https/{{website_cn}}'
+    chdir: '/etc/pki/https/{{ website_cn }}'
     creates: fullchain.pem
   shell: |
     set -o errexit
@@ -33,18 +33,18 @@
       --outfile=fullchain.pem
     chmod 0640 *.pem && chown root:https *.pem
 
-- name: 'Let dehydrated manage {{website_cn}} certificates'
+- name: 'Let dehydrated manage {{ website_cn }} certificates'
   lineinfile:
     path: /etc/dehydrated/domains.txt
-    line: '{{website_hostname_list|join(" ")}}'
+    line: '{{ website_hostname_list|join(" ") }}'
   notify:
     - Request certificates with dehydrated
 
 # Virtual host
-- name: 'Configure /etc/nginx/sites-enabled/{{website_cn}}.conf virtual host'
+- name: 'Configure /etc/nginx/sites-enabled/{{ website_cn }}.conf virtual host'
   template:
     src: vhost.nginx.conf.j2
-    dest: '/etc/nginx/sites-enabled/{{website_cn}}.conf'
+    dest: '/etc/nginx/sites-enabled/{{ website_cn }}.conf'
     mode: 0644
     trim_blocks: false
   notify:

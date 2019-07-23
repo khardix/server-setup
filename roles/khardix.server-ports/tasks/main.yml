@@ -3,7 +3,7 @@
   yum: name=yum-plugin-copr state=present
 
 - name: Enable project repository
-  command: 'yum -y copr enable "{{server_ports_project}}"'
+  command: 'yum -y copr enable "{{ server_ports_project }}"'
   args:
-    creates: '/etc/yum.repos.d/_copr_{{server_ports_project|replace("/", "-")}}.repo'
+    creates: '/etc/yum.repos.d/_copr_{{ server_ports_project|replace("/", "-") }}.repo'
     warn: false
