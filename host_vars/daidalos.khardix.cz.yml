@@ -8,3 +8,4 @@ letsencrypt_contact_email: 'khardix@gmail.com'
 hosted_static_sites:
   - hostname_list: [khardix.cz, www.khardix.cz]
     owner: khardix
+    i18n_subsites: [en, cs]
