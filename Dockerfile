@@ -8,3 +8,5 @@ RUN sudo apk add --update --no-cache ${PYTHON3_APK_PACKAGES} && sudo rm -rf /var
     && sudo python3 -m pip install --upgrade pip \
     && sudo python3 -m pip install --no-cache-dir --upgrade ${PYTHON3_PIP_PACKAGES} \
     && sudo rm -rf /root/.cache
+
+COPY .flake8    $HOME/.flake8
