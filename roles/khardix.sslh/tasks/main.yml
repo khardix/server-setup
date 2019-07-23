@@ -1,7 +1,7 @@
 ---
 - name: Install sslh and supporting packages
   package:
-    name: [sslh, iproute, python34]
+    name: [sslh, iproute, /usr/bin/python3]
 
 - name: Provide /usr/libexec/sslh
   file:
