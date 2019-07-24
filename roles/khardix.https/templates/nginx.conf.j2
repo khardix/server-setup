@@ -22,6 +22,7 @@ http {
     # Content type handling
     include         mime.types;
     default_type    application/octet-stream;
+    charset         utf-8;
     sendfile        on;  # quicker file sending using sendfile(2)
     gzip            on;  # use gzip when transferring files
 
