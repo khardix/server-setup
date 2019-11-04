@@ -2,14 +2,14 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: podman
 lint:
   name: yamllint
 platforms:
   - name: centos
     image: centos:7
     privileged: true
-    volume_mounts: ['/sys/fs/cgroup:/sys/fs/cgroup:z']
+    volume_mounts: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
     command: '/usr/sbin/init'
     environment:
       container: docker
