@@ -1,7 +1,4 @@
 ---
-dependencies:
-  - khardix.epel
-
 galaxy_info:
   author: Jan "Khardix" Staněk
   description: sslh multiplexer for safer SSH
@@ -18,6 +15,8 @@ galaxy_info:
   platforms:
     - name: EL
       versions: [7]
+    - name: Alpine
+      versions: [all]
 
   galaxy_tags:
     - multiplexer
@@ -25,3 +24,7 @@ galaxy_info:
     - ssh
     - ssl
     - hardening
+
+dependencies:
+  - role: khardix.epel
+    when: ansible_os_family == "RedHat"

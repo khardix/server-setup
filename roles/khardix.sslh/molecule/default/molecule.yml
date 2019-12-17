@@ -6,13 +6,16 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: centos
+  - name: centos-sslh
     image: centos:7
     privileged: true
     volume_mounts: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
     command: '/usr/sbin/init'
     environment:
       container: docker
+  - name: alpine-sslh
+    image: alpine:3
+    command: '/sbin/init'
 provisioner:
   name: ansible
   lint:
