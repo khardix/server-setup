@@ -9,3 +9,5 @@ hosted_static_sites:
   - hostname_list: [khardix.cz, www.khardix.cz]
     owner: khardix
     i18n_subsites: [en, cs]
+  - hostname_list: [svatba.khardix.cz]
+    owner: khardix
