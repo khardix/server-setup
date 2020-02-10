@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: podman
+lint:
+  name: yamllint
+platforms:
+  - name: instance
+    image: centos:7
+    privileged: true
+    command: '/usr/sbin/init'
+    volume_mounts: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
