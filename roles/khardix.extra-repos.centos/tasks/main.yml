@@ -1,2 +1,6 @@
 ---
+- name: Install repository RPMs
+  package:
+    name: '{{ extra_repos_centos_packages }}'
+    state: present
 ...

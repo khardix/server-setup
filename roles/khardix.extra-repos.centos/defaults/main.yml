@@ -1,2 +1,4 @@
 ---
+extra_repos_centos_packages:
+  - epel-release
 ...
