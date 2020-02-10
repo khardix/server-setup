@@ -32,7 +32,7 @@ build:docker:
 .test-template: &role_test
   image: *molecule_image
   script:
-    - molecule test
+    - molecule test --driver-name=docker
 
 # Test themselves
 
