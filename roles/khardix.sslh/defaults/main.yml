@@ -1,0 +1,4 @@
+---
+sslh_packages:
+  RedHat: [sslh, iproute, python3]
+  Alpine: [sslh, iproute2, python3]

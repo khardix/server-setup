@@ -1,7 +1,9 @@
 ---
 - name: Install sslh and supporting packages
   package:
-    name: [sslh, iproute, /usr/bin/python3]
+    name: '{{ sslh_packages[ansible_os_family] }}'
+    state: present
+    update_cache: true
 
 - name: Provide /usr/libexec/sslh
   file:
