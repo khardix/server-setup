@@ -1,4 +1,6 @@
 ---
 extra_repos_centos_packages:
   - epel-release
+extra_repos_centos_coprs:
+  - jstanek/server-ports
 ...
