@@ -36,15 +36,10 @@ build:docker:
 
 # Test themselves
 
-test:epel:
+test:extra-repos:
   <<: *role_test
   before_script:
-    - cd roles/khardix.epel
-
-test:server-ports:
-  <<: *role_test
-  before_script:
-    - cd roles/khardix.server-ports
+    - cd roles/khardix.extra-repos
 
 test:sslh:
   <<: *role_test

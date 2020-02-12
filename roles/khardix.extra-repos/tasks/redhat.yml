@@ -1,0 +1,18 @@
+---
+- name: Install copr plugin for YUM
+  package:
+    name: yum-plugin-copr
+    state: present
+
+- name: Install repository RPMs
+  package:
+    name: '{{ extra_repos_redhat_packages }}'
+    state: present
+
+- name: Enable COPR repositories
+  loop: '{{ extra_repos_redhat_coprs }}'
+  command:
+    argv: [yum, '-y', copr, enable, '{{ item }}']
+    creates: '/etc/yum.repos.d/_copr_{{ item|replace("/", "-") }}.repo'
+    warn: false
+...

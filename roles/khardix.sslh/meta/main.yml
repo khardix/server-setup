@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - khardix.epel
+  - khardix.extra-repos
 
 galaxy_info:
   author: Jan "Khardix" Staněk

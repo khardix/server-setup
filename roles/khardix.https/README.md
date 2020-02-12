@@ -19,7 +19,7 @@ Base setup of nginx as modular webserver, with TLS automation via letsencrypt.
 
 ## Dependencies
 
--   `khardix.epel`: Repository for most of the used packages.
+-   `khardix.extra-repos`: Most of the used packages comes from EPEL.
 -   `khardix.sslh`: Nginx is configured to share port 443.
 
 ## Example Playbook

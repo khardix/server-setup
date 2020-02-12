@@ -12,7 +12,7 @@ Also, the playbook should handle the change of SSH port during execution.
 
 ## Dependencies
 
--   `khardix.epel` -- Enable repository with the `sslh` package.
+-   `khardix.extra-repos` -- Enable EPEL repository with the `sslh` package.
 
 ## Example Playbook
 

@@ -1,4 +1,0 @@
-# Enables EPEL on CentOS
----
-- name: Install the repository definition
-  package: name=epel-release state=present
