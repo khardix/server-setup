@@ -1,2 +1,10 @@
 ---
+- name: Insert repository into /etc/apk/repositories
+  loop: '{{ extra_repos_alpine|dict2items }}'
+  lineinfile:
+    regex: '^@{{ item.key }}'
+    line: '@{{ item.key }} {{ item.value }}'
+    state: present
+    path: /etc/apk/repositories
+  register: extra_repos_alpine_new_repos
 ...

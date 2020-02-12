@@ -1,4 +1,8 @@
 ---
 - name: Import OS-specific tasks
   include_tasks: '{{ ansible_os_family|lower }}.yml'
+
+- name: Refresh available packages cache
+  package: update_cache=true
+  changed_when: false  # Alpine always report changed on cache update
 ...

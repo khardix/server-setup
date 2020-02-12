@@ -1,4 +1,8 @@
 ---
+# Family: Alpine
+extra_repos_alpine:
+  testing: 'http://nl.alpinelinux.org/alpine/edge/testing'
+
 # Family: RedHat
 extra_repos_redhat_packages:
   - epel-release
