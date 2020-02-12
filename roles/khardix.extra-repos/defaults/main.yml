@@ -1,6 +1,7 @@
 ---
-extra_repos_centos_packages:
+# Family: RedHat
+extra_repos_redhat_packages:
   - epel-release
-extra_repos_centos_coprs:
+extra_repos_redhat_coprs:
   - jstanek/server-ports
 ...

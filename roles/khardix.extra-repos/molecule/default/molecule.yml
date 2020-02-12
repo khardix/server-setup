@@ -8,11 +8,15 @@ lint:
 platforms:
   - name: instance-centos
     groups: [redhat]
-    image: centos:7
+    image: 'centos:7'
     privileged: true
     command: '/usr/sbin/init'
     volumes: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
     tmpfs: ['/run', '/tmp']
+  - name: instance-alpine
+    groups: [alpine]
+    image: 'alpine:3'
+    command: '/sbin/init'
 provisioner:
   name: ansible
   lint:
