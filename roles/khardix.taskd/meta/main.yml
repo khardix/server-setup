@@ -12,5 +12,5 @@ galaxy_info:
   galaxy_tags: []
 
 dependencies:
-  - role: khardix.server-ports
+  - role: khardix.extra-repos
   - role: khardix.firewall

@@ -4,7 +4,7 @@
 
 ## Dependencies
 
--   `khardix.server-ports`: Repository for the binary packages for `taskd`.
+-   `khardix.extra-repos`: `taskd` packages are present in `server-ports` COPR.
 -   `khardix.firewall`: Interface to the firewall
 
 ## Example Playbook

@@ -12,4 +12,4 @@ galaxy_info:
   galaxy_tags: []
 
 dependencies:
-  - role: khardix.epel
+  - role: khardix.extra-repos
