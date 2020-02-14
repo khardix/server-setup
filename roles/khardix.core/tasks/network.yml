@@ -1,0 +1,9 @@
+---
+- name: Insert public IP addresses into /etc/hosts
+  loop: '{{ core_network_public_ip|select|list }}'
+  lineinfile:
+    line: '{{ "{:<39}".format(item) }} {{ ansible_fqdn }} {{ ansible_hostname }}'
+    path: /etc/hosts
+    regex: '^{{ item }}\s+{{ ansible_fqdn }}\s+{{ ansible_hostname }}'
+    unsafe_writes: true  # Needed in containers
+...

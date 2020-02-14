@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Jan “Khardix” Staněk
+  description: Core, 0-dependency system settings
+  license: AGPL-3.0-or-later
+  min_ansible_version: 2.7
+  platforms:
+    - name: CentOs
+      versions: [7]
+    - name: Alpine
+      versions: all
+  galaxy_tags: []
+dependencies: []

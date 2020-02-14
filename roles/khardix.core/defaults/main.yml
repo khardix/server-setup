@@ -1,0 +1,5 @@
+---
+core_network_public_ip:
+  - '{{ ansible_default_ipv6.address|default(None) }}'
+  - '{{ ansible_default_ipv4.address|default(None) }}'
+...
