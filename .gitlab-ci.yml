@@ -35,6 +35,10 @@ build:docker:
     - molecule test --driver-name=docker
 
 # Test themselves
+test:core:
+  <<: *role_test
+  before_script:
+    - cd roles/khardix.core
 
 test:extra-repos:
   <<: *role_test
