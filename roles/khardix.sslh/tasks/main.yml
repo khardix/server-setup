@@ -1,24 +1,10 @@
 ---
 - name: Install sslh and supporting packages
   package:
-    name: [sslh, iproute, /usr/bin/python3]
-
-- name: Provide /usr/libexec/sslh
-  file:
-    path: /usr/libexec/sslh
-    state: directory
-    owner: sslh
-    mode: 0755
-
-- name: Install configuration generator
-  copy:
-    src: generate-listeners.py
-    dest: /usr/libexec/sslh/generate-listen.py
-    mode: 0750
-    owner: sslh
+    name: sslh
 
 - name: Install configuration file
-  copy: src=sslh.cfg dest=/etc/sslh.cfg
+  template: src=sslh.cfg.j2 dest=/etc/sslh.cfg
 
 - name: Install systemd service
   copy:

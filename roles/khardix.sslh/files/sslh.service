@@ -4,9 +4,6 @@ Documentation=man:sslh(8)
 After=network.target
 
 [Service]
-# Preparation
-RuntimeDirectory=sslh
-ExecStartPre=/usr/bin/python3 /usr/libexec/sslh/generate-listen.py -o %t/sslh/listen.cfg
 # Execution
 ExecStart=/usr/sbin/sslh -F/etc/sslh.cfg
 KillMode=process
