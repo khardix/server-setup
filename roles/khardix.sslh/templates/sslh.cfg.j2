@@ -12,13 +12,13 @@ user: "sslh";
 
 listen:
 (
-    { host: "{{ ansible_fqdn }}"; port: "443"; },
+    { host: "{{ ansible_fqdn }}"; port: "443"; }
 );
 
 protocols:
 (
      { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; fork: true; },
      { name: "tls"; host: "localhost"; port: "443"; log_level: 0; },
-     { name: "anyprot"; host: "localhost"; port: "443"; },
+     { name: "anyprot"; host: "localhost"; port: "443"; }
 );
 
