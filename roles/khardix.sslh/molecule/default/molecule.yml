@@ -6,11 +6,14 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: instance
-    image: centos/systemd:latest
-    privileged: true
+  - name: instance-centos
+    image: centos:7
     volume_mounts: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
     command: '/usr/sbin/init'
+  - name: instance-alpine
+    image: alpine:3
+    volume_mounts: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
+    command: '/sbin/init'
 provisioner:
   name: ansible
   lint:
