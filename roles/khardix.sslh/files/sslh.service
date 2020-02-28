@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 # Execution
-ExecStart=/usr/sbin/sslh -F/etc/sslh.cfg
+ExecStart=/usr/sbin/sslh -F/etc/sslh/sslh.cfg --foreground
 KillMode=process
 #Hardening
 PrivateTmp=true

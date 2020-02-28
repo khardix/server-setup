@@ -34,10 +34,30 @@
         mode: 0644
         group: sslh
 
-- name: Install systemd service
+- name: Install service file
+  vars:
+    sslh_service:
+      systemd:
+        src: sslh.service
+        dest: /etc/systemd/system/sslh.service
+        mode: '0644'
+      openrc:
+        src: sslh.initd
+        dest: /etc/init.d/sslh
+        mode: '0744'
   copy:
-    src: sslh.service
-    dest: /etc/systemd/system/sslh.service
+    src: '{{ sslh_service[ansible_service_mgr].src }}'
+    dest: '{{ sslh_service[ansible_service_mgr].dest }}'
+    mode: '{{ sslh_service[ansible_service_mgr].mode }}'
 
-- name: Start and enable sslh.service
-  service: name=sslh.service state=started enabled=true daemon_reload=true
+
+- name: Start and enable sslh service
+  block:
+    - name: Reload systemd definition
+      when: ansible_service_mgr == "systemd"
+      systemd: daemon_reload=true
+    - name: Enable and start sslh service
+      service:
+        name: sslh
+        state: started
+        enabled: true

@@ -1,0 +1,6 @@
+#!/sbin/openrc-run
+# vim:set filetype=sh:
+
+readonly command=/usr/sbin/sslh
+readonly pidfile="/var/run/${RC_SVCNAME}.pid"
+readonly command_args="--config /etc/sslh/sslh.cfg --background --pidfile ${pidfile}"
