@@ -10,6 +10,7 @@ platforms:
     image: centos:7
     volume_mounts: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
     command: '/usr/sbin/init'
+    privileged: true
   - name: instance-alpine
     image: alpine:3
     volume_mounts: ['/sys/fs/cgroup:/sys/fs/cgroup:ro']
