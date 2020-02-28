@@ -4,8 +4,28 @@
     name: '{{ sslh_packages[ansible_os_family|lower] }}'
     state: present
 
+- name: Provide sslh user and group
+  block:
+    - name: Provide sslh group
+      group:
+        name: sslh
+        state: present
+        system: true
+    - name: Provide sslh user
+      user:
+        state: present
+        name: sslh
+        group: sslh
+        system: true
+        shell: /sbin/nologin
+        create_home: false
+
 - name: Install configuration file
-  template: src=sslh.cfg.j2 dest=/etc/sslh.cfg
+  template:
+    src: sslh.cfg.j2
+    dest: /etc/sslh.cfg
+    mode: 0644
+    owner: sslh
 
 - name: Install systemd service
   copy:
