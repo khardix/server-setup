@@ -1,4 +1,5 @@
 import os
+
 import pytest
 from testinfra.utils.ansible_runner import AnsibleRunner
 
@@ -13,7 +14,7 @@ def facts(host):
 def test_sslh_service_state(host):
     """Enabled as dependency of socket"""
 
-    service = host.service("sslh.service")
+    service = host.service("sslh")
     assert service.is_enabled
     assert service.is_running
 
