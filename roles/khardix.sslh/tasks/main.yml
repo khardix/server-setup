@@ -20,12 +20,19 @@
         shell: /sbin/nologin
         create_home: false
 
-- name: Install configuration file
-  template:
-    src: sslh.cfg.j2
-    dest: /etc/sslh.cfg
-    mode: 0644
-    owner: sslh
+- name: Configure sslh
+  block:
+    - name: Provide /etc/sslh directory
+      file:
+        path: /etc/sslh
+        state: directory
+        mode: 0755
+    - name: Generate /etc/sslh/sslh.cfg
+      template:
+        src: sslh.cfg.j2
+        dest: /etc/sslh/sslh.cfg
+        mode: 0644
+        group: sslh
 
 - name: Install systemd service
   copy:
