@@ -1,7 +1,8 @@
 ---
 - name: Install sslh and supporting packages
   package:
-    name: sslh
+    name: '{{ sslh_packages[ansible_os_family|lower] }}'
+    state: present
 
 - name: Install configuration file
   template: src=sslh.cfg.j2 dest=/etc/sslh.cfg
