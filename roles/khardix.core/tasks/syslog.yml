@@ -1,0 +1,13 @@
+---
+- name: Install syslog and it's service
+  package:
+    name: busybox-initscripts
+    state: present
+
+- name: Enable syslog service
+  service:
+    name: syslog
+    state: started
+    enabled: true
+    runlevel: boot
+...

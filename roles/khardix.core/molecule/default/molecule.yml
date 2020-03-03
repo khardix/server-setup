@@ -8,8 +8,13 @@ lint:
 platforms:
   - name: instance-centos
     image: centos:7
+    command: /sbin/init
+    tmpfs: ["/run", "/tmp"]
+    volumes: ["/sys/fs/cgroup:/sys/fs/cgroup:ro"]
   - name: instance-alpine
-    image: alpine:3
+    image: dockage/alpine:3.11-openrc
+    command: /sbin/init
+    tmpfs: ["/run", "/tmp"]
 provisioner:
   name: ansible
   lint:
