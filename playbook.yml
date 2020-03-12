@@ -1,0 +1,7 @@
+# Master playbook file – complete setup of fresh machine
+---
+- hosts: all
+  become: true
+  tasks:
+    - ping: ~
+...
