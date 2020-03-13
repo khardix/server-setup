@@ -2,6 +2,17 @@
 ---
 - hosts: all
   become: true
-  tasks:
-    - ping: ~
+  gather_facts: false
+
+  pre_tasks:
+    - name: Find usable SSH port
+      when: ansible_port is defined
+      vars:
+        candidate_ssh_ports: ['{{ ansible_port }}', 22]
+      include_tasks:
+        file: tasks/test-ssh-port.yml
+        apply: {tags: [always]}
+      tags: [always]
+    - name: Gather facts
+      setup: ~
 ...

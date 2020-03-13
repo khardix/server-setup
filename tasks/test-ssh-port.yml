@@ -1,0 +1,22 @@
+# Tests multiple SSH ports and use the first working one for future connections
+---
+- name: Find first opened port in {{ candidate_ssh_ports }}
+  loop: '{{ candidate_ssh_ports }}'
+  wait_for:
+    port: '{{ item }}'
+    state: started
+    host: '{{ ansible_host if ansible_host != "localhost" else inventory_hostname }}'
+    connect_timeout: 3
+    timeout: 4
+  delegate_to: localhost
+  register: ssh_port_check
+  when: 'ssh_port_check.failed|default(true)'
+  ignore_errors: true
+
+- name: Set ansible_port to {{ ssh_port_check.results[-1].item }}
+  set_fact:
+    ansible_port: '{{ ssh_port_check.results[-1].item }}'
+
+- name: Verify usable connection
+  ping: ~
+...
