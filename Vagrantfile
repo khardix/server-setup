@@ -22,5 +22,11 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbook.yml"
     ansible.compatibility_mode = "2.0"
+    ansible.host_vars = {
+      "alpine" => {
+        # Vagrant sets only short host name on Alpine
+        "override_fqdn" => "ikaros.khardix.cz",
+      },
+    }
   end
 end
