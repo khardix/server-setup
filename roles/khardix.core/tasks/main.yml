@@ -1,0 +1,8 @@
+---
+# ### Network configuration ###################################################
+- name: Provide {{ override_fqdn|default(ansible_facts.fqdn) }} entries in /etc/hosts
+  template:
+    src: etc/hosts
+    dest: /etc/hosts
+    unsafe_writes: true  # needed in container
+...

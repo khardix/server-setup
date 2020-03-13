@@ -1,0 +1,6 @@
+---
+# Numeric public IP mapped to the FQDN of the host via /etc/hosts
+core_network_public_ip:
+  - '{{ ansible_default_ipv6.address|default(None) }}'
+  - '{{ ansible_default_ipv4.address|default(None) }}'
+...

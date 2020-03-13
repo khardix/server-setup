@@ -15,4 +15,7 @@
       tags: [always]
     - name: Gather facts
       setup: ~
+
+  roles:
+    - role: khardix.core
 ...

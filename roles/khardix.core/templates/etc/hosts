@@ -1,0 +1,11 @@
+{# vim:set filetype=ansible_hosts.jinja2: #}
+{{ ansible_managed|comment }}
+
+# Default localhost entries
+127.0.0.1                               localhost.localdomain localhost
+::1                                     localhost.localdomain localhost
+
+# Self-referential entries
+{% for address in core_network_public_ip|select %}
+{{ "{:<39}".format(address) }} {{ override_fqdn|default(ansible_facts.fqdn) }} {{ ansible_facts.hostname }}
+{% endfor %}
