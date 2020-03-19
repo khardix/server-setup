@@ -1,7 +1,10 @@
 ---
-- name: Restart rsyslog
+- name: Reboot the machine
+  reboot: ~
+
+- name: Reload rsyslog
   when: ansible_facts.service_mgr != "systemd"
   service:
     name: rsyslog
-    state: restarted
+    state: reloaded
 ...

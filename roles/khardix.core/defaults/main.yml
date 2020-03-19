@@ -8,10 +8,15 @@ core_packages:
   redhat:
     - systemd
 
-# Core services to always start and enable
+# Core services to modify
 core_services:
   alpine:
-    - rsyslog
+    - name: rsyslog
+      enabled: true
+      runlevel: boot
+    - name: syslog
+      enabled: false
+      runlevel: boot
   redhat: []
 
 # Numeric public IP mapped to the FQDN of the host via /etc/hosts

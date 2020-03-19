@@ -10,7 +10,7 @@
   template:
     src: rsyslog.conf.j2
     dest: /etc/rsyslog.conf
-  notify: Restart rsyslog
+  notify: Reload rsyslog
 
 # ### Network configuration ###################################################
 - name: Provide {{ override_fqdn|default(ansible_facts.fqdn) }} entries in /etc/hosts
@@ -20,10 +20,14 @@
     unsafe_writes: true  # needed in container
 
 
-- name: Enable core services
+- name: Modify core services
   loop: '{{ core_services[ansible_facts.os_family|lower] }}'
+  loop_control:
+    label: '{{ item.name|default(item) }}: {{ "enabled" if item.enabled|default(true) else "disabled" }}'
   service:
-    name: '{{ item }}'
-    state: started
-    enabled: true
+    name: '{{ item.name|default(item) }}'
+    state: '{{ item.state|default(omit) }}'
+    enabled: '{{ item.enabled|default(true) }}'
+    runlevel: '{{ item.runlevel|default("default") }}'
+  notify: Reboot the machine
 ...
