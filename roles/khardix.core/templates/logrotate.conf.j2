@@ -1,0 +1,19 @@
+{# vim:set filetype=conf.jinja2: #}
+# {{ ansible_managed|center }}
+#
+# Basic logrotate configuration, crafted to match /etc/rsyslog.conf
+
+# ### Defaults ################################################################
+# Compress rotated logs using gzip
+compress
+# Use %Y-%m-%d suffix and yesterday date for old dated logs
+dateext
+dateformat -%Y-%m-%d
+dateyesterday
+# Missing log files are generally not a problem
+missingok
+# Do not mail removed logs
+nomail
+
+# ### Dynamic configuration ###################################################
+include /etc/logrotate.d/

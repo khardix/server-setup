@@ -5,6 +5,13 @@
     state: present
 
 
+# ### Network configuration ###################################################
+- name: Provide {{ override_fqdn|default(ansible_facts.fqdn) }} entries in /etc/hosts
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    unsafe_writes: true  # needed in container
+
 # ### Logging management ######################################################
 - name: Configure rsyslog
   template:
@@ -12,12 +19,25 @@
     dest: /etc/rsyslog.conf
   notify: Reload rsyslog
 
-# ### Network configuration ###################################################
-- name: Provide {{ override_fqdn|default(ansible_facts.fqdn) }} entries in /etc/hosts
-  template:
-    src: hosts.j2
-    dest: /etc/hosts
-    unsafe_writes: true  # needed in container
+- name: Configure log rotation
+  block:
+    - name: Configure /etc/logrotate.conf
+      template:
+        src: logrotate.conf.j2
+        dest: /etc/logrotate.conf
+    - name: Configure /etc/logrotate.d/rsyslog
+      template:
+        src: logrotate.d/rsyslog.j2
+        dest: /etc/logrotate.d/rsyslog
+    - name: Schedule log rotation (cron)
+      vars:
+        dest:
+          alpine: /etc/periodic/daily
+          redhat: /etc/cron.daily
+      copy:
+        src: periodic/logrotate
+        dest: '{{ dest[ansible_facts.os_family|lower] }}/logrotate'
+        mode: 0744
 
 
 - name: Modify core services

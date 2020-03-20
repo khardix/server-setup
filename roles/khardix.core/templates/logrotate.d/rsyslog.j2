@@ -1,0 +1,23 @@
+{# vim:set filetype=conf.jinja2: #}
+# {{ ansible_managed|center }}
+
+# ### Syslog ##################################################################
+/var/log/messages /var/log/secure /var/log/mail /var/log/cron {
+    rotate 6
+    sharedscripts
+    weekly
+
+    postrotate
+        /sbin/rc-service rsyslog --ifstarted reload
+    endscript
+}
+
+/var/log/boot {
+    daily
+    notifempty
+    rotate 5
+
+    postrotate
+        /sbin/rc-service rsyslog --ifstarted reload
+    endscript
+}

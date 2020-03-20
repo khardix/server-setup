@@ -2,10 +2,13 @@
 # Core packages – service manager, logging management
 core_packages:
   alpine:
+    - logrotate
     - openrc
     - rsyslog
     - rsyslog-openrc
   redhat:
+    - logrotate
+    - rsyslog
     - systemd
 
 # Core services to modify
@@ -17,7 +20,11 @@ core_services:
     - name: syslog
       enabled: false
       runlevel: boot
-  redhat: []
+    - name: crond
+      enabled: true
+  redhat:
+    - rsyslog.service
+    - crond.service
 
 # Numeric public IP mapped to the FQDN of the host via /etc/hosts
 core_network_public_ip:
