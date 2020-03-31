@@ -18,4 +18,5 @@
 
   roles:
     - role: khardix.core
+    - role: khardix.firewall
 ...
