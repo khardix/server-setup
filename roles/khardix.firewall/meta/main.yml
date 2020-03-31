@@ -8,6 +8,9 @@ galaxy_info:
     - name: Alpine
       versions:
         - all
+    - name: CentOS
+      versions:
+        - 7
   galaxy_tags: []
 
 dependencies: []

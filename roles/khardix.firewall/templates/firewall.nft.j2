@@ -1,0 +1,29 @@
+{# vim:set filetype=nftables.jinja2: #}
+# {{ ansible_managed|center }}
+
+# General IPv4/IPv6 filtering
+table inet firewall {
+    # Open SSH ports
+    set ssh_ports {
+        type inet_service;
+        elements = { 22 };
+    }
+
+    chain input_chain {
+        # Filter input and drop all unknown traffic
+        type filter hook input priority 0; policy drop;
+
+        # Allow local and existing (or related) connections
+        iiftype loopback accept;
+        ct state { established,related } accept;
+
+        # Allow ICMP ping
+        icmp type echo-request accept;
+        icmpv6 type { echo-request,nd-neighbor-solicit } accept;
+
+        # Allow SSH connection to configured ports
+        tcp dport @ssh_ports accept;
+    }
+}
+
+include "{{ firewall_config_dir.path.rstrip('/') }}/*.nft"

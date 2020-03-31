@@ -1,2 +1,40 @@
 ---
+- name: Install nftables and tools
+  package:
+    name: nftables
+    state: present
+
+- name: Provide drop-in firewall configuration directory
+  file:
+    path: /etc/firewall.nft.d
+    state: directory
+    mode: 0755
+    owner: root
+  register: firewall_config_dir
+
+- name: Configure basic firewall rules
+  template:
+    src: firewall.nft.j2
+    dest: /etc/firewall.nft
+    mode: 0444
+    owner: root
+  notify: Restart nftables
+
+- name: Configure nftables service
+  vars:
+    config_path:
+      openrc: conf.d/nftables
+      systemd: sysconfig/nftables.conf
+  copy:
+    src: '{{ config_path[ansible_facts.service_mgr] }}'
+    dest: '/etc/{{ config_path[ansible_facts.service_mgr] }}'
+    mode: 0644
+    owner: root
+  notify: Restart nftables
+
+- name: Enable nftables firewall
+  service:
+    name: nftables
+    state: started
+    enabled: true
 ...
