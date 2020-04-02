@@ -1,0 +1,17 @@
+---
+- name: Set allowed public key for root
+  authorized_key:
+    user: root
+    key: '{{ remote_shell_authorized_root_key }}'
+    state: present
+
+- name: Configure SSH daemon
+  template:
+    src: ssh/sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    mode: 0644
+    owner: root
+    validate: /usr/sbin/sshd -t -f '%s'
+    backup: true
+  notify: Reload SSHD
+...

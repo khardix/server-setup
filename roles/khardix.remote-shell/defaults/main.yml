@@ -1,2 +1,13 @@
 ---
+# Personal GPG key used as SSH public key
+remote_shell_authorized_root_key: >-
+  ssh-ed25519
+  AAAAC3NzaC1lZDI1NTE5AAAAIABrLcUAORKMejx5ZHm2rtjmchY58JFz58X9sNv/PfRR
+  openpgp:0xC5CC249C
+
+remote_shell_packages:
+  alpine:
+    - openssh-server
+  redhat:
+    - openssh-server
 ...
