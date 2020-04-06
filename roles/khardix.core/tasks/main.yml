@@ -1,4 +1,7 @@
 ---
+- name: Add extra system repositories
+  include_tasks: '{{ ansible_facts.os_family|lower }}/extra-repositories.yml'
+
 - name: Install core packages
   package:
     name: '{{ core_packages[ansible_facts.os_family|lower] }}'
@@ -43,6 +46,7 @@
 - name: Modify core services
   loop: '{{ core_services[ansible_facts.os_family|lower] }}'
   loop_control:
+    # yamllint disable-line rule:line-length
     label: '{{ item.name|default(item) }}: {{ "enabled" if item.enabled|default(true) else "disabled" }}'
   service:
     name: '{{ item.name|default(item) }}'

@@ -1,0 +1,9 @@
+---
+- name: Include edge repositories
+  loop:
+    - {tag: edge, url: 'https://mirror.fit.cvut.cz/alpine/edge/main'}
+    - {tag: testing, url: 'https://mirror.fit.cvut.cz/alpine/edge/testing'}
+  lineinfile:
+    path: /etc/apk/repositories
+    line: '@{{ item.tag }} {{ item.url }}'
+...
