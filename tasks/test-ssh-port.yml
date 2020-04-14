@@ -18,5 +18,6 @@
     ansible_port: '{{ ssh_port_check.results[-1].item }}'
 
 - name: Verify usable connection
-  ping: ~
+  raw: whoami
+  changed_when: false
 ...

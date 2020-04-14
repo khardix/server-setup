@@ -13,6 +13,8 @@
         file: tasks/test-ssh-port.yml
         apply: {tags: [always]}
       tags: [always]
+    - name: Bootstrap the machine
+      script: tasks/bootstrap.sh
     - name: Gather facts
       setup: ~
 
