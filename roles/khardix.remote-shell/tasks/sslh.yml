@@ -1,0 +1,46 @@
+---
+- name: Provide user for sslh
+  user:
+    name: sslh
+    state: present
+    system: true
+    password_lock: true
+    shell: /sbin/nologin
+  register: remote_shell_sslh_user
+
+- name: Configure sslh
+  template:
+    src: sslh.cfg.j2
+    dest: /etc/sslh.cfg
+    mode: 0644
+    owner: root
+  register: remote_shell_sslh_config
+  notify: Restart SSLH
+
+- name: Configure sslh service (OpenRC)
+  when: 'ansible_facts.service_mgr in ["sysvinit", "openrc"]'
+  template:
+    src: conf.d/sslh.j2
+    dest: /etc/conf.d/sslh
+    mode: 0644
+    owner: root
+- name: Configure sslh service (SystemD)
+  when: 'ansible_facts.service_mgr == "systemd"'
+  template:
+    src: sysconfig/sslh.j2
+    dest: /etc/sysconfig/sslh
+    mode: 0644
+    owner: root
+
+- name: Enable sslh service
+  service:
+    name: sslh
+    state: started
+    enabled: true
+
+- name: Switch SSH port to 443
+  block:
+    - name: Use port 443 for further connections
+      set_fact:
+        ansible_port: 443
+...

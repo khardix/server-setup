@@ -13,9 +13,13 @@
   when: 'ssh_port_check.failed|default(true)'
   ignore_errors: true
 
-- name: Set ansible_port to {{ ssh_port_check.results[-1].item }}
+- name: Set ansible_port to {{ first_working_port }}
+  vars:
+    first_working_port: '{{
+      ssh_port_check.results|select("success")|reject("skipped")|map(attribute="item")|list|first
+    }}'
   set_fact:
-    ansible_port: '{{ ssh_port_check.results[-1].item }}'
+    ansible_port: '{{ first_working_port }}'
 
 - name: Verify usable connection
   raw: whoami

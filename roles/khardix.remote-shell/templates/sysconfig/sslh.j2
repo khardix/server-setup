@@ -1,0 +1,4 @@
+{# vim:set filetype=conf.jinja2: #}
+# {{ ansible_managed|center }}
+# The options passed to the sslh binary can be provided here
+DAEMON_OPTS="-F{{ remote_shell_sslh_config.dest }}"

@@ -6,7 +6,7 @@ table inet firewall {
     # Open SSH ports
     set ssh_ports {
         type inet_service;
-        elements = { 22 };
+        elements = { {{ firewall_opened_ssh_ports|join(", ") }} };
     }
 
     chain input_chain {

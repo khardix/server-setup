@@ -5,4 +5,5 @@
     state: present
 
 - import_tasks: ssh.yml
+- import_tasks: sslh.yml
 ...
