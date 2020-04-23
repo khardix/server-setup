@@ -2,11 +2,13 @@
 # Core packages – service manager, logging management
 core_packages:
   alpine:
+    - lnav@testing
     - logrotate
     - openrc
     - rsyslog
     - rsyslog-openrc
   redhat:
+    - lnav
     - logrotate
     - rsyslog
     - systemd
