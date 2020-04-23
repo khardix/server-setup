@@ -1,4 +1,9 @@
 ---
+- name: Restart SSLH
+  service:
+    name: sslh
+    state: restarted
+
 - name: Reload SSHD
   service:
     name: sshd

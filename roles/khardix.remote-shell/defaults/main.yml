@@ -8,6 +8,9 @@ remote_shell_authorized_root_key: >-
 remote_shell_packages:
   alpine:
     - openssh-server
+    - sslh-doc@testing
+    - sslh@testing
   redhat:
     - openssh-server
+    - sslh
 ...

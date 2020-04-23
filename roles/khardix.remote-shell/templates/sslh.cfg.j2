@@ -1,0 +1,24 @@
+{# vim:set filetype=cfg.jinja2: #}
+# {{ ansible_managed|center }}
+# Adapted from "basic" example
+
+verbose: false;
+foreground: true;
+inetd: false;
+numeric: false;
+transparent: false;
+timeout: 2;
+
+user: "{{ remote_shell_sslh_user.name }}";
+
+listen:
+(
+    { host: "{{ override_fqdn|default(ansible_facts.fqdn) }}"; port: "443"; }
+);
+
+protocols:
+(
+    { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; fork: true; },
+    { name: "tls"; host: "localhost"; port: "443"; log_level: 0; },
+    { name: "anyprot"; host: "localhost"; port: "443"; }
+);
