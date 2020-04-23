@@ -6,4 +6,8 @@
 
 - import_tasks: ssh.yml
 - import_tasks: sslh.yml
+
+- name: Switch to port 443 for further communication
+  set_fact:
+    ansible_port: 443
 ...

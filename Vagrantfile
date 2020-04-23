@@ -17,8 +17,13 @@ Vagrant.configure("2") do |config|
     ansible.compatibility_mode = "2.0"
     ansible.host_vars = {
       "alpine" => {
+        "ansible_port": 443,
+
         # Vagrant sets only short host name on Alpine
         "override_fqdn" => "ikaros.khardix.cz",
+      },
+      "centos" => {
+        "ansible_port": 443,
       },
     }
   end
