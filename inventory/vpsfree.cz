@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""Dynamic inventory for VPSfree VPS"""
+
+import json
+import subprocess
+from functools import partial
+from operator import methodcaller
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
+from urllib.parse import urljoin
+
+import click
+import requests
+
+PRODUCTION = ["daidalos.khardix.cz"]
+PLAYGROUND = ["ikaros.khardix.cz", "helios.khardix.cz"]
+
+VF_API_ROOT = "https://api.vpsfree.cz/5.0"
+PASS_VF_CREDENTIALS = "www/vpsfree.cz"
+
+
+# New named types
+Json = Union[str, dict]
+
+
+def vf_query(
+    session: requests.Session,
+    api_path: str,
+    parameters: Optional[Json] = None,
+    *,
+    api_root: str = VF_API_ROOT,
+) -> Json:
+    """Query VPSFree API.
+
+    Keyword arguments:
+        session: Session to use for querying. Should be authenticated.
+        api_path: The API endpoint to query.
+        parameters: Optional additional parameters for the query.
+        api_root: The root of the API service.
+
+    Returns:
+        Parsed response to the query.
+
+    Raises:
+        requests.HTTPError: The query was unsuccessfull.
+    """
+
+    response = session.get(urljoin(api_root, api_path), params=parameters)
+    response.raise_for_status()
+    return response.json()
+
+
+def vf_list_vps(session: requests.Session) -> List[dict]:
+    """List all VPS owned by authenticated user.
+
+    Keyword arguments:
+        session: Authenticated session for querying.
+
+    Returns:
+        List of existing VPS (as dictionaries).
+
+    Raises:
+        requests.HTTPError: The query was rejected by API.
+    """
+
+    response = vf_query(session, "vpses", parameters={"object_state": "active"})
+    return response["response"]["vpses"]
+
+
+def vf_attach_ip(session: requests.Session, vps: dict) -> dict:
+    """Attach public IP addresses to a VPS dictionary.
+
+    Keyword arguments:
+        session: Authenticated session for querying.
+        vps: A VPS dictionary, as returned by the API.
+
+    Returns:
+        Clone of vps with attached IP addresses.
+
+    Raises:
+        requests.HTTPError: IP query was rejected by API.
+    """
+
+    NAMESPACE = "host_ip_addresses"
+
+    response = vf_query(
+        session, NAMESPACE, parameters={"host_ip_address[vps]": vps["id"]}
+    )
+    return dict(
+        vps, ip_addresses=[addr["addr"] for addr in response["response"][NAMESPACE]]
+    )
+
+
+def ansible_format_host(vps: dict) -> Tuple[str, dict]:
+    """Convert API VPS description into ansible inventory format.
+
+    Keyword arguments:
+        vps: The VPS information from the API.
+            Needs to have an 'ip_addresses' key defined.
+
+    Returns:
+        Ansible equivalent of vps (hostname: variable map).
+
+    Raises:
+        KeyError: vps does not contain needed information.
+    """
+
+    return vps["hostname"], {"ansible_host": vps["ip_addresses"][0]}
+
+
+def pass_credentials(path: str = PASS_VF_CREDENTIALS) -> Tuple[str, str]:
+    """Retrieve API credentials from passwordstore.
+
+    Keyword arguments:
+        path: Path to the credentials.
+
+    Returns: username, password
+
+    Raises:
+        subprocess.CalledProcessError: pass executable or path not found
+    """
+
+    result = subprocess.run(
+        ["pass", "show", path], stdout=subprocess.PIPE, encoding="utf-8"
+    )
+
+    password, __, metadata = result.stdout.partition("\n")
+    metadata = dict(
+        map(methodcaller("split", ": ", maxsplit=1), metadata.strip().splitlines())
+    )
+
+    return metadata["login"], password
+
+
+@click.group("vpsfree.cz", context_settings={"ignore_unknown_options": True})
+@click.option(
+    "-p",
+    "--pass-credentials",
+    "credential_path",
+    default=PASS_VF_CREDENTIALS,
+    help="Path to the pass credentials for VPSFree API.",
+)
+@click.pass_context
+def main(context, credential_path):
+    """Query VPSFree API for ansible inventory information."""
+
+    # Authenticate user
+    context.obj = requests.Session()
+    context.obj.auth = pass_credentials(path=credential_path)
+
+
+@main.resultcallback()
+def dump_json(result, **_options):
+    """Dump command results in JSON format."""
+
+    stdout = click.get_text_stream("stdout", encoding="utf-8")
+    json.dump(result, stdout)
+
+
+@main.command("--list")
+@click.pass_obj
+def list(session):
+    """List the VPSFree inventory."""
+
+    vps_list = vf_list_vps(session)
+    vps_list = map(partial(vf_attach_ip, session), vps_list)
+
+    hostvars = dict(map(ansible_format_host, vps_list))
+
+    return {
+        "_meta": {"hostvars": hostvars},
+        "all": {"children": ["public"]},
+        # public: differentiate from non-internet-visible VMs and images
+        "public": {"children": ["production", "playground"]},
+        "production": [host for host in PRODUCTION if host in hostvars],
+        "playground": [host for host in PLAYGROUND if host in hostvars],
+    }
+
+
+@main.command("--host")
+@click.argument("hostname")
+@click.pass_obj
+def host(session, hostname):
+    """Provide variables for specific host.
+
+    Should be mostly unused, and it is present only for compatibility with older ansible.
+    """
+
+    vps_list = vf_list_vps(session)
+    vps_list = filter(lambda vps: vps["hostname"] == hostname, vps_list)
+    vps = next(vps_list, None)
+
+    if vps is None:
+        return {}
+
+    vps = vf_attach_ip(session, vps)
+    return ansible_format_host(vps)[1]
+
+
+if __name__ == "__main__":
+    main()

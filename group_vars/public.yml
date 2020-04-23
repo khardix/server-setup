@@ -1,0 +1,4 @@
+# Common variables for publicly-accessible machines
+---
+ansible_port: 443
+...
