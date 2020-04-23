@@ -1,0 +1,4 @@
+---
+# Port on which the SSH daemon is supposed to listen
+firewall_opened_ssh_ports: [22]
+...
