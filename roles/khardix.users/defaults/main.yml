@@ -1,0 +1,13 @@
+---
+# Default packages pre-installed for user comfort
+users_packages:
+  alpine:
+    - git
+    - git-lfs
+    - zsh
+    - zsh-vcs
+  redhat:
+    - git
+    - git-lfs
+    - zsh
+...

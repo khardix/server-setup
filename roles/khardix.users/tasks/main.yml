@@ -1,0 +1,23 @@
+---
+- name: Install extra and QoL packages
+  package:
+    name: '{{ users_packages[ansible_facts.os_family|lower] }}'
+    state: present
+
+- name: Create user accounts
+  loop: '{{ human_users }}'
+  user:
+    state: present
+    name: '{{ item.login }}'
+    password: '{{ item.password }}'
+    groups: '{{ item.groups|default(omit) }}'
+    shell: '{{ item.shell|default(omit) }}'
+    append: true
+
+- name: Insert authorized SSH keys
+  loop: '{{ human_users|selectattr("ssh_key")|list }}'
+  authorized_key:
+    state: present
+    user: '{{ item.login }}'
+    key: '{{ item.ssh_key }}'
+...
