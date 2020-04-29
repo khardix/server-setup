@@ -25,7 +25,7 @@ clean: $(MACHINE:%=%-cleaned)
 
 .vagrant/machines/%/ssh-config: Vagrantfile
 	vagrant up $(notdir $(@D))
-	vagrant ssh-config $(notdir $(@D)) >$@
+	vagrant ssh-config $(notdir $(@D))|sed '/IdentitiesOnly/d'>$@
 
 %-cleaned:
 	$(RM) .vagrant/machines/$(@:%-cleaned=%)/ssh-config
