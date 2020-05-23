@@ -9,6 +9,13 @@
     cmd: find /etc/skel -mindepth 1 -delete
     removes: /etc/skel/.bashrc  # canary
 
+- name: Enable sudo usage for wheel group
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL)    ALL'
+    validate: 'visudo -cf "%s"'
+
 - name: Create user accounts
   loop: '{{ human_users }}'
   user:
