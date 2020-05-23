@@ -13,6 +13,9 @@
         file: tasks/test-ssh-port.yml
         apply: {tags: [always]}
       tags: [always]
+    - name: Provide remote_tmp dir
+      changed_when: false  # Do not care
+      raw: 'mkdir -p /run/ansible && chmod 0777 /run/ansible'
     - name: Bootstrap the machine
       changed_when: false  # Unsupported
       script: tasks/bootstrap.sh
