@@ -4,6 +4,11 @@
     name: '{{ users_packages[ansible_facts.os_family|lower] }}'
     state: present
 
+- name: Ensure /etc/skel is empty
+  command:
+    cmd: find /etc/skel -mindepth 1 -delete
+    removes: /etc/skel/.bashrc  # canary
+
 - name: Create user accounts
   loop: '{{ human_users }}'
   user:
@@ -11,8 +16,17 @@
     name: '{{ item.login }}'
     password: '{{ item.password }}'
     groups: '{{ item.groups|default(omit) }}'
-    shell: '{{ item.shell|default(omit) }}'
     append: true
+    shell: '{{ item.shell|default(omit) }}'
+
+- name: Clone home directory repositories
+  loop: '{{ human_users|selectattr("home_git")|list }}'
+  become: true
+  become_user: '{{ item.login }}'
+  git:
+    repo: '{{ item.home_git }}'
+    dest: '/home/{{ item.login }}'
+    update: no
 
 - name: Insert authorized SSH keys
   loop: '{{ human_users|selectattr("ssh_key")|list }}'

@@ -6,6 +6,7 @@ human_users:
       $6$hicsuntdracones$64mhvYmHPAox4juGNdyqxfId2S.F3a2TcgTnU2T9Dvmq8ebfc/JtlpgF.Hxt5QL4.zgC8ua3mzoU3hM5BHFqY1
     groups: [wheel]
     shell: /bin/zsh
+    home_git: https://git.sr.ht/~khardix/homedir
     ssh_key: >-
       ssh-ed25519
       AAAAC3NzaC1lZDI1NTE5AAAAIABrLcUAORKMejx5ZHm2rtjmchY58JFz58X9sNv/PfRR
