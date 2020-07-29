@@ -2,7 +2,7 @@
 - name: Install extra and QoL packages
   package:
     name: '{{ users_packages[ansible_facts.os_family|lower] }}'
-    state: present
+    state: latest  # Needed for updates from COPR
 
 - name: Ensure /etc/skel is empty
   command:

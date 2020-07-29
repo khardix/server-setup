@@ -1,5 +1,10 @@
 # Settings common to all machines
 ---
+# Extra COPR repos for convenience on EL-7
+core_copr_repos:
+  - 'hnakamur/vim'
+  - 'jstanek/server-ports'
+
 human_users:
   - login: khardix
     password: >-

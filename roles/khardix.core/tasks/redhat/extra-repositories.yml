@@ -3,4 +3,15 @@
   package:
     name: epel-release
     state: present
+
+- name: Install yum plugin for COPR
+  package:
+    name: yum-plugin-copr
+    state: present
+
+- name: Enable extra COPR repositories
+  loop: '{{ core_copr_repos }}'
+  command:
+    argv: [yum, '-y', copr, enable, '{{ item }}']
+    creates: '/etc/yum.repos.d/_copr_{{ item|replace("/", "-") }}.repo'
 ...
