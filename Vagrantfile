@@ -12,6 +12,11 @@ Vagrant.configure("2") do |config|
     alpine.vm.hostname = "ikaros.khardix.cz"
   end
 
+  config.vm.define "minecraft" do |minecraft|
+    minecraft.vm.box = "centos/7"
+    minecraft.vm.hostname = "mc.khardix.cz"
+  end
+
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbook.yml"
     ansible.compatibility_mode = "2.0"
