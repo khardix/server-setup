@@ -14,4 +14,5 @@
   command:
     argv: [yum, '-y', copr, enable, '{{ item }}']
     creates: '/etc/yum.repos.d/_copr_{{ item|replace("/", "-") }}.repo'
+    warn: false
 ...
