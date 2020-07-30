@@ -15,6 +15,11 @@ Vagrant.configure("2") do |config|
   config.vm.define "minecraft" do |minecraft|
     minecraft.vm.box = "centos/7"
     minecraft.vm.hostname = "mc.khardix.cz"
+
+    minecraft.vm.provider :libvirt do |libvirt|
+      libvirt.cpus = 4
+      libvirt.memory = 6144
+    end
   end
 
   config.vm.provision "ansible" do |ansible|
