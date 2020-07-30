@@ -1,2 +1,16 @@
 ---
+- name: Install Java
+  package:
+    name: java-1.8.0-openjdk-headless
+    state: present
+
+# User setup
+- name: Provide minecraft user
+  user:
+    state: present
+    name: minecraft
+    home: /srv/minecraft
+    shell: /bin/sh
+    password_lock: true
+    system: true
 ...
