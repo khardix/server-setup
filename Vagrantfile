@@ -30,6 +30,9 @@ Vagrant.configure("2") do |config|
       "centos" => {
         "ansible_port": 443,
       },
+      "minecraft" => {
+        "ansible_port": 443,
+      },
     }
   end
 end
