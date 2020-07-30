@@ -33,7 +33,7 @@
   git:
     repo: '{{ item.home_git }}'
     dest: '/home/{{ item.login }}'
-    update: no
+    update: false
 
 - name: Insert authorized SSH keys
   loop: '{{ human_users|selectattr("ssh_key")|list }}'
