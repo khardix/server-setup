@@ -1,0 +1,5 @@
+---
+minecraft_pack_list:
+  - name: ansible-testing
+    forge_version: '1.12.2-14.23.5.2854'
+...

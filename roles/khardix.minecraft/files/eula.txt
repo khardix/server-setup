@@ -1,0 +1,2 @@
+# Indicates that the server owner agrees to MineCraft EULA
+eula=true

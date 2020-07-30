@@ -13,4 +13,35 @@
     shell: /bin/sh
     password_lock: true
     system: true
+
+# Per-pack environment
+- name: Provide modpack directories
+  loop: '{{ minecraft_pack_list }}'
+  file:
+    path: '/srv/minecraft/{{ item.name }}'
+    state: directory
+    owner: minecraft
+    mode: 04700  # setuid
+
+- name: Download forge installers
+  loop: '{{ minecraft_pack_list|selectattr("forge_version")|list }}'
+  get_url:
+    # yamllint disable-line rule:line-length
+    url: 'https://files.minecraftforge.net/maven/net/minecraftforge/forge/{{ item.forge_version }}/forge-{{ item.forge_version }}-installer.jar'
+    dest: '/srv/minecraft/{{ item.name }}/forge-installer.jar'
+  register: minecraft_forge_installer_list
+
+- name: Install downloaded forge versions
+  loop: '{{ minecraft_forge_installer_list.results }}'
+  command:
+    chdir: '{{ item.dest|dirname }}'
+    argv: [java, '-jar', '{{ item.dest|basename }}', '--installServer']
+    creates: '{{ item.dest|dirname }}/forge-{{ item.item.forge_version }}.jar'
+
+- name: Agree to MineCraft EULA
+  loop: '{{ minecraft_pack_list }}'
+  copy:
+    src: eula.txt
+    dest: '/srv/minecraft/{{ item.name }}/eula.txt'
+    mode: 0644
 ...
