@@ -7,6 +7,8 @@
     name: '{{ core_packages[ansible_facts.os_family|lower] }}'
     state: present
 
+- name: Enhance locale and terminal support
+  include_tasks: '{{ ansible_facts.os_family|lower }}/remote-term-tweaks.yml'
 
 # ### Network configuration ###################################################
 - name: Provide {{ override_fqdn|default(ansible_facts.fqdn) }} entries in /etc/hosts

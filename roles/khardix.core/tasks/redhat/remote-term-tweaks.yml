@@ -1,0 +1,15 @@
+# Ensure that all locales are available
+---
+- name: Ensure the presence of Czech locale files
+  command:
+    argv: [yum, '-y', reinstall, glibc-common]
+    creates: /usr/share/i18n/locales/cs_CZ
+    warn: false
+
+- name: Provide terminfo for tmux-256color
+  command:
+    argv: [tic, '-']
+    stdin: '{{ lookup("file", "tmux-256color.terminfo") }}'
+    creates: /usr/share/terminfo/t/tmux-256color
+    warn: false
+...
