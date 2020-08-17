@@ -1,0 +1,19 @@
+{# vim:set filetype=systemd.jinja2: #}
+# Template service file for minecraft server
+[Unit]
+Description=Modded MineCraft server (%I)
+
+[Service]
+User={{ minecraft_user.name }}
+WorkingDirectory={{ minecraft_user.home }}/%i
+
+Environment=JAVA_ARGUMENTS="" MINECRAFT_JAR=minecraft_server.jar
+EnvironmentFile=-{{ minecraft_sysconfig_dir.path }}/%i
+
+Type=simple
+ExecStart=/usr/bin/java $JAVA_ARGUMENTS -jar "$MINECRAFT_JAR" --nogui --noconsole
+TimeoutStartSec=5min
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

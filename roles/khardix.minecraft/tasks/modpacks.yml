@@ -1,0 +1,60 @@
+# Individual modpack setup
+---
+- name: Setup modpack directories
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: &mc-loop-control
+    label: '{{ item.id }}'
+  file:
+    state: directory
+    owner: '{{ minecraft_user.name }}'
+    mode: 04700
+    path: '{{ minecraft_user.home }}/{{ item.id }}'
+
+- name: Download Forge installers
+  loop: '{{ minecraft_pack_list|selectattr("forge_version")|list }}'
+  loop_control: *mc-loop-control
+  get_url:
+    # yamllint disable-line rule:line-length
+    url: 'https://files.minecraftforge.net/maven/net/minecraftforge/forge/{{ item.forge_version }}/forge-{{ item.forge_version }}-installer.jar'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/forge-installer.jar'
+    owner: '{{ minecraft_user.name }}'
+  register: minecraft_forge_installer_list
+
+- name: Install downloaded Forge servers
+  loop: '{{ minecraft_forge_installer_list.results }}'
+  loop_control:
+    label: '{{ item.dest|dirname|basename }}'
+  become: true
+  become_user: '{{ minecraft_user.name }}'
+  command:
+    chdir: '{{ item.dest|dirname }}'
+    creates: '{{ item.dest|dirname }}/forge-{{ item.item.forge_version }}.jar'
+    argv: [java, -jar, '{{ item.dest }}', --installServer]
+
+- name: Agree to MineCraft EULA
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: eula.txt
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/eula.txt'
+    owner: '{{ minecraft_user.name }}'
+    mode: 0644
+
+- name: Configure server.properties
+  loop: '{{ minecraft_pack_list|selectattr("server_properties")|list }}'
+  loop_control: *mc-loop-control
+  template:
+    src: server.properties
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/server.properties'
+    owner: '{{ minecraft_user.name }}'
+    mode: 0744
+
+- name: Configure service environment
+  loop: '{{ minecraft_pack_list|selectattr("environment")|list }}'
+  loop_control: *mc-loop-control
+  template:
+    src: environment
+    dest: '{{ minecraft_sysconfig_dir.path }}/{{ item.id }}'
+    owner: root
+    mode: 0644
+...

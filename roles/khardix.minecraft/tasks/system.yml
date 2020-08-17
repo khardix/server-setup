@@ -1,0 +1,33 @@
+# System setup – packages, users, services
+---
+- name: Install Java and associated packages
+  package:
+    name:
+      - java-1.8.0-openjdk-headless
+      - unzip
+    state: present
+
+- name: Provide minecraft user
+  user:
+    name: minecraft
+    state: present
+    home: /srv/minecraft
+    create_home: true
+    shell: /bin/sh
+    password_lock: true
+    system: true
+  register: minecraft_user
+
+- name: Provide system configuration directory for minecraft service
+  file:
+    state: directory
+    owner: root
+    mode: 0755
+    path: /etc/sysconfig/minecraft
+  register: minecraft_sysconfig_dir
+
+- name: Install systemd template service
+  template:
+    src: minecraft.service
+    dest: /etc/systemd/system/minecraft@.service
+...

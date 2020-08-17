@@ -1,5 +1,25 @@
 ---
 minecraft_pack_list:
-  - name: ansible-testing
+  - id: ansible-testing
     forge_version: '1.12.2-14.23.5.2854'
+    port: 42510
+    environment:
+      JAVA_ARGUMENTS: >-
+        -Xmx5120M -Xms1024M
+        -XX:+UseG1GC
+        -Dsun.rmi.dgc.server.gcInterval=2147483646
+        -XX:+UnlockExperimentalVMOptions
+        -XX:G1NewSizePercent=20
+        -XX:G1ReservePercent=20
+        -XX:MaxGCPauseMillis=50
+        -XX:G1HeapRegionSize=32M
+    server_properties:
+      allow-flight: true
+      difficulty: normal
+      force-gamemode: true
+      gamemode: survival
+      level-seed: Nyx
+      max-players: 7
+      motd: Experimental MineCraft server
+      white-list: true
 ...

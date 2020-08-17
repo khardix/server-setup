@@ -1,0 +1,8 @@
+{# vim:set filetype=env.jinja2: #}
+# SystemD environment file for MineCraft. Managed by Ansible.
+{% if "forge_version" in item %}
+MINECRAFT_JAR=forge-{{ item.forge_version }}.jar
+{% endif %}
+{% for variable, value in item.environment.items() %}
+{{ variable|upper }}={{value}}
+{% endfor %}
