@@ -3,6 +3,7 @@
 - hosts: all
   become: true
   gather_facts: false
+  tags: [basics]
 
   pre_tasks:
     - name: Find usable SSH port
@@ -31,6 +32,7 @@
 - hosts: minecraft
   become: true
   gather_facts: false
+  tags: [minecraft]
   roles:
     - role: khardix.minecraft
 ...
