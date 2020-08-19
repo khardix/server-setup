@@ -31,6 +31,16 @@
     creates: '{{ item.dest|dirname }}/forge-{{ item.item.forge_version }}.jar'
     argv: [java, -jar, '{{ item.dest }}', --installServer]
 
+- name: Unpack provided server pack archives
+  loop: '{{ minecraft_pack_list|selectattr("server_pack")|list }}'
+  loop_control: *mc-loop-control
+  unarchive:
+    src: '{{ item.server_pack }}'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+    keep_newer: true
+
 - name: Agree to MineCraft EULA
   loop: '{{ minecraft_pack_list }}'
   loop_control: *mc-loop-control
