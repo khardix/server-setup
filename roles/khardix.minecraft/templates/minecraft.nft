@@ -1,0 +1,11 @@
+{# vim:set filetype=nftables.jinja2: #}
+# {{ ansible_managed|center }}
+
+# Define MineCraft ports
+add set     inet firewall minecraft_ports {
+    type inet_service;
+    elements = { {{ minecraft_pack_list|map(attribute="port", default=25565)|join(", ") }} };
+}
+
+# Allow TCP traffic to MineCraft ports
+add rule    inet firewall input_chain tcp dport @minecraft_ports accept;

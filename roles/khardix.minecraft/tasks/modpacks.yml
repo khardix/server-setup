@@ -67,4 +67,13 @@
     dest: '{{ minecraft_sysconfig_dir.path }}/{{ item.id }}'
     owner: root
     mode: 0644
+
+- name: Open modpack ports in nftables
+  template:
+    src: minecraft.nft
+    dest: '{{ firewall_config_dir.path }}/minecraft.nft'
+    owner: root
+    mode: 0644
+  notify:
+    - Restart nftables
 ...
