@@ -20,6 +20,15 @@
     owner: root
   notify: Restart nftables
 
+- name: Fix CentOS 7 service
+  when:
+    - ansible_facts.service_mgr == "systemd"
+    - ansible_facts.distribution == "CentOS"
+    - ansible_facts.distribution_major_version == "7"
+  copy:
+    src: systemd/system/nftables.service.d/
+    dest: /etc/systemd/system/nftables.service.d/
+
 - name: Configure nftables service
   vars:
     config_path:
@@ -31,6 +40,12 @@
     mode: 0644
     owner: root
   notify: Restart nftables
+
+- name: Reload systemd daemons
+  when:
+    - ansible_facts.service_mgr == "systemd"
+  systemd:
+    daemon_reload: true
 
 - name: Enable nftables firewall
   service:

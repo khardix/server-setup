@@ -1,4 +1,7 @@
 ---
+- name: Reload systemd daemons
+  systemd: {daemon_reload: true}
+
 - name: Restart nftables
   service: {name: nftables, state: restarted}
 ...
