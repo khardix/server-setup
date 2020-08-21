@@ -31,4 +31,5 @@
   template:
     src: minecraft.service
     dest: /etc/systemd/system/minecraft@.service
+  notify: Reload systemd daemons
 ...

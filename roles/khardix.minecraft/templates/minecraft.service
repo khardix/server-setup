@@ -3,6 +3,9 @@
 [Unit]
 Description=Modded MineCraft server (%i)
 
+Wants=network.target
+After=network.target
+
 [Service]
 User={{ minecraft_user.name }}
 WorkingDirectory={{ minecraft_user.home }}/%i
@@ -16,8 +19,11 @@ EnvironmentFile=-{{ minecraft_sysconfig_dir.path }}/%i.rcon.env
 
 Type=simple
 ExecStart=/usr/bin/java $JAVA_ARGUMENTS -jar "$MINECRAFT_JAR" --nogui --noconsole
-TimeoutStartSec=5min
 Restart=on-failure
+
+# Give the server about 30 seconds to stop, then let systemd kill it
+ExecStop=-/usr/bin/mcrcon save-all stop
+ExecStop=/usr/bin/sleep 30s
 
 [Install]
 WantedBy=default.target
