@@ -1,14 +1,18 @@
 {# vim:set filetype=systemd.jinja2: #}
 # Template service file for minecraft server
 [Unit]
-Description=Modded MineCraft server (%I)
+Description=Modded MineCraft server (%i)
 
 [Service]
 User={{ minecraft_user.name }}
 WorkingDirectory={{ minecraft_user.home }}/%i
 
+# General environment for the service itself
 Environment=JAVA_ARGUMENTS="" MINECRAFT_JAR=minecraft_server.jar
-EnvironmentFile=-{{ minecraft_sysconfig_dir.path }}/%i
+EnvironmentFile=-{{ minecraft_sysconfig_dir.path }}/%i.env
+# Environment configuration for remote console (mcrcon)
+Environment=MCRCON_HOST=localhost MCRCON_PORT=25575 MCRCON_PASS=
+EnvironmentFile=-{{ minecraft_sysconfig_dir.path }}/%i.rcon.env
 
 Type=simple
 ExecStart=/usr/bin/java $JAVA_ARGUMENTS -jar "$MINECRAFT_JAR" --nogui --noconsole

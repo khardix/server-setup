@@ -64,8 +64,17 @@
   loop_control: *mc-loop-control
   template:
     src: environment
-    dest: '{{ minecraft_sysconfig_dir.path }}/{{ item.id }}'
+    dest: '{{ minecraft_sysconfig_dir.path }}/{{ item.id }}.env'
     owner: root
+    mode: 0644
+- name: Configure RCON environment
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  template:
+    src: environment.rcon
+    dest: '{{ minecraft_sysconfig_dir.path }}/{{ item.id }}.rcon.env'
+    owner: root
+    group: minecraft
     mode: 0644
 
 - name: Open modpack ports in nftables
