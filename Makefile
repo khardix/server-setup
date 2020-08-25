@@ -8,6 +8,7 @@ export RUBYOPT=-W0
 .PHONY: all idempotence clean
 .PHONY: $(MACHINE)
 .PHONY: %-login %-cleaned
+.PHONY: sources
 
 # Spin up and provision all machines
 all: $(foreach machine,$(MACHINE),.vagrant/machines/$(machine)/ssh-config)
@@ -31,3 +32,7 @@ clean: $(MACHINE:%=%-cleaned)
 %-cleaned:
 	$(RM) .vagrant/machines/$(@:%-cleaned=%)/ssh-config
 	vagrant destroy --force $(@:%-cleaned=%)
+
+# Make remote-hosted files available locally
+sources:
+	find files/ -name '*.url' -execdir wget --no-verbose --timestamping -i '{}' +
