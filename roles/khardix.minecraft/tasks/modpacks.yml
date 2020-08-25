@@ -35,7 +35,7 @@
   loop: '{{ minecraft_pack_list|selectattr("server_pack")|list }}'
   loop_control: *mc-loop-control
   unarchive:
-    src: '{{ minecraft_vendor_dir.path }}/{{ item.server_pack.url|urlsplit("path")|basename }}'
+    src: '{{ item.server_pack }}'
     dest: '{{ minecraft_user.home }}/{{ item.id }}'
     owner: '{{ minecraft_user.name }}'
     group: '{{ minecraft_user.group }}'

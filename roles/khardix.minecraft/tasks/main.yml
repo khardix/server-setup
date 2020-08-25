@@ -1,4 +1,3 @@
 ---
-- import_tasks: local-setup.yml
 - import_tasks: system.yml
 - import_tasks: modpacks.yml

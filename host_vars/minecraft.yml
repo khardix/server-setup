@@ -2,9 +2,7 @@
 minecraft_pack_list:
   - id: enigmatica-2
     forge_version: '1.12.2-14.23.5.2854'
-    server_pack:
-      url: 'https://edge.forgecdn.net/files/2888/196/Enigmatica2Server-1.77.zip'
-      checksum: 'sha256:a9016d9a8ae206d608b0f3bff2fce15c9e1019c6c4a0676e16af17e7e0afcfd6'
+    server_pack: Enigmatica2Server-1.77.zip
     port: 42510
     environment:
       JAVA_ARGUMENTS: >-
