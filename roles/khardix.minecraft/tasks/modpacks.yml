@@ -41,6 +41,20 @@
     group: '{{ minecraft_user.group }}'
     keep_newer: true
 
+- name: Install additional mods
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: 'minecraft/{{ item.id }}/mods/'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/mods/'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+  register: minecraft_mod_copy
+  failed_when:
+    - minecraft_mod_copy is failed
+    # Skip on missing source directory
+    - '"Could not find or access" not in minecraft_mod_copy.msg'
+
 - name: Agree to MineCraft EULA
   loop: '{{ minecraft_pack_list }}'
   loop_control: *mc-loop-control
@@ -76,6 +90,21 @@
     owner: root
     group: minecraft
     mode: 0644
+
+- name: Configure mods
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: 'minecraft/{{ item.id }}/config/'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/config/'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+    mode: 0644
+  register: minecraft_config_copy
+  failed_when:
+    - minecraft_config_copy is failed
+    # Skip on missing source directory
+    - '"Could not find or access" not in minecraft_config_copy.msg'
 
 - name: Open modpack ports in nftables
   template:
