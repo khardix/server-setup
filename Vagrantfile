@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     alpine.vm.hostname = "ikaros.khardix.cz"
   end
 
-  config.vm.define "minecraft" do |minecraft|
+  config.vm.define "mc" do |minecraft|
     minecraft.vm.box = "centos/7"
     minecraft.vm.hostname = "mc.khardix.cz"
 
@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "playbook.yml"
     ansible.compatibility_mode = "2.0"
     ansible.groups = {
-      "minecraft" => ["minecraft"],
+      "minecraft" => ["mc"],
     }
     ansible.host_vars = {
       "alpine" => {
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
       "centos" => {
         "ansible_port": 443,
       },
-      "minecraft" => {
+      "mc" => {
         "ansible_port": 443,
       },
     }

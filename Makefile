@@ -1,5 +1,5 @@
 # Streamline operations on Vagrant-managed VMs
-MACHINE := alpine centos minecraft
+MACHINE := alpine centos mc
 SSH_PORT := 443
 
 # Do not particularly care about ruby warnings from Vagrant
@@ -15,7 +15,7 @@ all: $(foreach machine,$(MACHINE),.vagrant/machines/$(machine)/ssh-config)
 # Log in to specific machine and spawn a root shell
 alpine: alpine-login
 centos: centos-login
-mc: minecraft-login
+mc: mc-login
 # Re-provision all machines to test for script idempotence
 idempotence: all
 	vagrant provision | grep 'changed='
