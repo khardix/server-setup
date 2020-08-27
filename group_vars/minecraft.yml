@@ -23,4 +23,6 @@ minecraft_pack_list:
       max-players: 7
       motd: Experimental MineCraft server
       white-list: true
+      resource-pack: 'https\://download.mc-packs.net/pack/eaa7f46d82413a8fd4a7a43fe3bad86736bdb8d9.zip'
+      resource-pack-sha1: 'eaa7f46d82413a8fd4a7a43fe3bad86736bdb8d9'
 ...
