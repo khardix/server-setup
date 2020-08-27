@@ -1,4 +1,14 @@
 ---
+- name: Mount separated HDD
+  loop: '{{ core_mount_points }}'
+  loop_control:
+    label: '{{ item.path }}'
+  mount:
+    state: mounted
+    src: '{{ item.src }}'
+    path: '{{ item.path }}'
+    fstype: '{{ item.fstype }}'
+
 - name: Add extra system repositories
   include_tasks: '{{ ansible_facts.os_family|lower }}/extra-repositories.yml'
 
