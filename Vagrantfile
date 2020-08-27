@@ -25,6 +25,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbook.yml"
     ansible.compatibility_mode = "2.0"
+    ansible.groups = {
+      "minecraft" => ["minecraft"],
+    }
     ansible.host_vars = {
       "alpine" => {
         "ansible_port": 443,
