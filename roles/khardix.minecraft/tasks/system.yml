@@ -19,6 +19,14 @@
     system: true
   register: minecraft_user
 
+- name: Provide backup directory owned by {{ minecraft_user.name }}
+  file:
+    state: directory
+    path: /var/backups/minecraft
+    mode: 0755
+    owner: '{{ minecraft_user.name }}'
+  register: minecraft_backup_root
+
 - name: Provide system configuration directory for minecraft service
   file:
     state: directory

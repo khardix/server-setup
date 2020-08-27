@@ -9,6 +9,23 @@
     owner: '{{ minecraft_user.name }}'
     mode: 04700
     path: '{{ minecraft_user.home }}/{{ item.id }}'
+- name: Setup backup directories
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  file:
+    state: directory
+    path: '{{ minecraft_backup_root.path }}/{{ item.id }}'
+    mode: 0755
+    owner: '{{ minecraft_user.name }}'
+- name: Link backup directories
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  file:
+    state: link
+    src: '{{ minecraft_backup_root.path }}/{{ item.id }}'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/backups'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
 
 - name: Download Forge installers
   loop: '{{ minecraft_pack_list|selectattr("forge_version")|list }}'
