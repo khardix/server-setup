@@ -26,7 +26,7 @@ clean: $(MACHINE:%=%-cleaned)
 	ssh -F$< -p$(SSH_PORT) -t $(@:%-login=%) -- sudo -s
 
 .vagrant/machines/%/ssh-config: Vagrantfile
-	vagrant up $(notdir $(@D))
+	vagrant --no-destroy-on-error up $(notdir $(@D))
 	vagrant ssh-config $(notdir $(@D))|sed '/IdentitiesOnly/d'>$@
 
 %-cleaned:
