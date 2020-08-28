@@ -6,7 +6,7 @@ minecraft_pack_list:
     port: 42510
     environment:
       JAVA_ARGUMENTS: >-
-        -Xmx5120M -Xms1024M
+        -Xmx8192M -Xms2048M
         -XX:+UseG1GC
         -Dsun.rmi.dgc.server.gcInterval=2147483646
         -XX:+UnlockExperimentalVMOptions

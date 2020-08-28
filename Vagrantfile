@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
 
     minecraft.vm.provider :libvirt do |libvirt|
       libvirt.cpus = 4
-      libvirt.memory = 6144
+      libvirt.memory = 12228
     end
   end
 
