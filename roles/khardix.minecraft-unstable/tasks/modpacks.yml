@@ -123,6 +123,33 @@
     # Skip on missing source directory
     - '"Could not find or access" not in minecraft_config_copy.msg'
 
+- name: Whitelist players
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: 'minecraft/{{ item.id }}/whitelist.json'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/whitelist.json'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+    mode: 0644
+  register: minecraft_whitelist_copy
+  failed_when:
+    - minecraft_whitelist_copy is failed
+    - '"Could not find or access" not in minecraft_whitelist_copy.msg'
+- name: Designate operators
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: 'minecraft/{{ item.id }}/ops.json'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/ops.json'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+    mode: 0644
+  register: minecraft_ops_copy
+  failed_when:
+    - minecraft_ops_copy is failed
+    - '"Could not find or access" not in minecraft_ops_copy.msg'
+
 - name: Open modpack ports in nftables
   template:
     src: minecraft.nft
