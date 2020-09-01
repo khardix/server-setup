@@ -22,6 +22,6 @@ minecraft_pack_list:
       level-seed: Nyx
       level-type: BIOMESOP
       max-players: 7
-      motd: Experimental MineCraft server
+      motd: 'Kingdom of Night and Fire (and Flowers!)'
       white-list: true
 ...
