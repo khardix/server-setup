@@ -1,4 +1,7 @@
 ---
+# HDDs to be mounted
+core_mount_points: []
+
 # Core packages – service manager, logging management
 core_packages:
   alpine:

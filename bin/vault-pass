@@ -1,0 +1,2 @@
+#!/bin/sh
+pass show ansible-vault/server|sed 1q

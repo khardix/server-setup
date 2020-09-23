@@ -1,0 +1,27 @@
+---
+minecraft_pack_list:
+  - id: enigmatica-2
+    forge_version: '1.12.2-14.23.5.2854'
+    server_pack: Enigmatica2Server-1.77.zip
+    port: 42510
+    environment:
+      JAVA_ARGUMENTS: >-
+        -Xmx12228M -Xms2048M
+        -XX:+UseG1GC
+        -Dsun.rmi.dgc.server.gcInterval=2147483646
+        -XX:+UnlockExperimentalVMOptions
+        -XX:G1NewSizePercent=20
+        -XX:G1ReservePercent=20
+        -XX:MaxGCPauseMillis=50
+        -XX:G1HeapRegionSize=32M
+    server_properties:
+      allow-flight: true
+      difficulty: normal
+      force-gamemode: true
+      gamemode: survival
+      level-seed: Nyx
+      level-type: BIOMESOP
+      max-players: 7
+      motd: 'Kingdom of Night and Fire (and Flowers!)'
+      white-list: true
+...

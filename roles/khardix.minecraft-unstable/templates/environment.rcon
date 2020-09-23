@@ -1,0 +1,5 @@
+{# vim:set filetype=jinja2: #}
+# Remote connection configuration for mcrcon
+MCRCON_HOST=localhost
+MCRCON_PORT={{ item.port|default(25565)|int + 1 }}
+MCRCON_PASS={{ lookup('password', 'credentials/minecraft/rcon/' + item.id + ' chars=ascii_letters,digits') }}

@@ -1,0 +1,161 @@
+# Individual modpack setup
+---
+- name: Setup modpack directories
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: &mc-loop-control
+    label: '{{ item.id }}'
+  file:
+    state: directory
+    owner: '{{ minecraft_user.name }}'
+    mode: 04700
+    path: '{{ minecraft_user.home }}/{{ item.id }}'
+- name: Setup backup directories
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  file:
+    state: directory
+    path: '{{ minecraft_backup_root.path }}/{{ item.id }}'
+    mode: 0755
+    owner: '{{ minecraft_user.name }}'
+- name: Link backup directories
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  file:
+    state: link
+    src: '{{ minecraft_backup_root.path }}/{{ item.id }}'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/backups'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+
+- name: Download Forge installers
+  loop: '{{ minecraft_pack_list|selectattr("forge_version")|list }}'
+  loop_control: *mc-loop-control
+  get_url:
+    # yamllint disable-line rule:line-length
+    url: 'https://files.minecraftforge.net/maven/net/minecraftforge/forge/{{ item.forge_version }}/forge-{{ item.forge_version }}-installer.jar'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/forge-installer.jar'
+    owner: '{{ minecraft_user.name }}'
+  register: minecraft_forge_installer_list
+
+- name: Install downloaded Forge servers
+  loop: '{{ minecraft_forge_installer_list.results }}'
+  loop_control:
+    label: '{{ item.dest|dirname|basename }}'
+  become: true
+  become_user: '{{ minecraft_user.name }}'
+  command:
+    chdir: '{{ item.dest|dirname }}'
+    creates: '{{ item.dest|dirname }}/forge-{{ item.item.forge_version }}.jar'
+    argv: [java, -jar, '{{ item.dest }}', --installServer]
+
+- name: Unpack provided server pack archives
+  loop: '{{ minecraft_pack_list|selectattr("server_pack")|list }}'
+  loop_control: *mc-loop-control
+  unarchive:
+    src: 'minecraft/{{ item.id }}/{{ item.server_pack }}'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+    keep_newer: true
+
+- name: Install additional mods
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: 'minecraft/{{ item.id }}/mods/'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/mods/'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+  register: minecraft_mod_copy
+  failed_when:
+    - minecraft_mod_copy is failed
+    # Skip on missing source directory
+    - '"Could not find or access" not in minecraft_mod_copy.msg'
+
+- name: Agree to MineCraft EULA
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: eula.txt
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/eula.txt'
+    owner: '{{ minecraft_user.name }}'
+    mode: 0644
+
+- name: Configure server.properties
+  loop: '{{ minecraft_pack_list|selectattr("server_properties")|list }}'
+  loop_control: *mc-loop-control
+  template:
+    src: server.properties
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/server.properties'
+    owner: '{{ minecraft_user.name }}'
+    mode: 0744
+
+- name: Configure service environment
+  loop: '{{ minecraft_pack_list|selectattr("environment")|list }}'
+  loop_control: *mc-loop-control
+  template:
+    src: environment
+    dest: '{{ minecraft_sysconfig_dir.path }}/{{ item.id }}.env'
+    owner: root
+    mode: 0644
+- name: Configure RCON environment
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  template:
+    src: environment.rcon
+    dest: '{{ minecraft_sysconfig_dir.path }}/{{ item.id }}.rcon.env'
+    owner: root
+    group: minecraft
+    mode: 0644
+
+- name: Configure mods
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: 'minecraft/{{ item.id }}/config/'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/config/'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+    mode: 0644
+  register: minecraft_config_copy
+  failed_when:
+    - minecraft_config_copy is failed
+    # Skip on missing source directory
+    - '"Could not find or access" not in minecraft_config_copy.msg'
+
+- name: Whitelist players
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: 'minecraft/{{ item.id }}/whitelist.json'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/whitelist.json'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+    mode: 0644
+  register: minecraft_whitelist_copy
+  failed_when:
+    - minecraft_whitelist_copy is failed
+    - '"Could not find or access" not in minecraft_whitelist_copy.msg'
+- name: Designate operators
+  loop: '{{ minecraft_pack_list }}'
+  loop_control: *mc-loop-control
+  copy:
+    src: 'minecraft/{{ item.id }}/ops.json'
+    dest: '{{ minecraft_user.home }}/{{ item.id }}/ops.json'
+    owner: '{{ minecraft_user.name }}'
+    group: '{{ minecraft_user.group }}'
+    mode: 0644
+  register: minecraft_ops_copy
+  failed_when:
+    - minecraft_ops_copy is failed
+    - '"Could not find or access" not in minecraft_ops_copy.msg'
+
+- name: Open modpack ports in nftables
+  template:
+    src: minecraft.nft
+    dest: '{{ firewall_config_dir.path }}/minecraft.nft'
+    owner: root
+    mode: 0644
+  notify:
+    - Restart nftables
+...

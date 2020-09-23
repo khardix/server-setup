@@ -1,0 +1,8 @@
+# Settings specific to enigma.czechglobe.cz
+---
+override_fqdn: enigma.czechglobe.cz
+core_mount_points:
+  - fstype: xfs
+    src: UUID=194ab716-8c85-4a9c-a264-8e83ed15f080
+    path: /var/backups
+...
